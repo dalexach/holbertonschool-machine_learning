@@ -3,6 +3,7 @@
 This file contains matrix_shape function
 """
 
+
 def matrix_shape(matrix):
     """
     Function that receives a matrix and calculate the shape of it
