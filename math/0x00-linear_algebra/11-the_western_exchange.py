@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """
-This file contains  function
+This file contains np_transpose function
 """
 
 
-def :
+def np_transpose(matrix):
     """
-    Function that
+    Function that transposes matrix(numpy.ndarray)
 
     Parameters:
-    - 
+    - matrix (nympy.ndarray)
 
     Return:
-
+     A new numpy.ndarray
     """
+    return matrix.T
