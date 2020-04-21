@@ -33,12 +33,10 @@ fig.suptitle('All in One')
 fig.add_subplot(321)
 plt.xlim(0, len(y0)-1)
 plt.plot(range(len(y0)), y0, color='red')
-plt.yticks(np.arange(0, 1001, step=500))
-plt.xticks(np.arange(0, 11, step=2))
 
 # Scatter plot
 fig.add_subplot(322)
-plt.scatter(x1, y1, s=5,color='magenta')
+plt.scatter(x1, y1, s=5, color='magenta')
 plt.xlabel('Height (in)', fontsize='x-small')
 plt.ylabel('Weight (lbs)', fontsize='x-small')
 plt.title('Men\'s Height vs Weight', fontsize='x-small')
