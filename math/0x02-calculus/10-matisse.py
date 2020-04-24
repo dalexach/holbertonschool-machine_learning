@@ -13,20 +13,22 @@ def poly_derivative(poly):
      List of coefficients representing the derivative of the polynomial
     """
 
-    if poly is None or poly == []:
+    if poly is None or poly == [] or type(poly) is not list:
         return None
 
     derivate = []
     i = 0
 
-    for i in range(len(poly)):
+    while i < len(poly):
         if type(poly[i]) not in (int, float):
             return None
         elif len(poly) == 1:
             derivate.append(0)
         else:
             if i == 0:
+                i += 1
                 continue
             derivate.append(poly[i]*i)
+        i += 1
 
     return derivate
