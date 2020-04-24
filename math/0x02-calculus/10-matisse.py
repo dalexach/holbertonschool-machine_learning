@@ -17,10 +17,15 @@ def poly_derivative(poly):
         return ([0])
 
     derivate = []
-    i = 1
-
+    i = 0
 
     while i < len(poly):
-        derivate.append(poly[i]*i)
+        if type(poly[i]) not in (int, float):
+            return None
+        else:
+            if i == 0:
+                i += 1
+                continue
+            derivate.append(poly[i]*i)
         i += 1
     return derivate
