@@ -19,15 +19,14 @@ def poly_derivative(poly):
     derivate = []
     i = 0
 
-    while i < len(poly):
+    for i in range(len(poly)):
         if type(poly[i]) not in (int, float):
             return None
         elif len(poly) == 1:
             derivate.append(0)
         else:
             if i == 0:
-                i += 1
                 continue
             derivate.append(poly[i]*i)
-        i += 1
+
     return derivate
