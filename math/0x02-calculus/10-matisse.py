@@ -14,7 +14,7 @@ def poly_derivative(poly):
     """
 
     if poly is None or poly == []:
-        return ([0])
+        return None
 
     derivate = []
     i = 0
