@@ -22,6 +22,8 @@ def poly_derivative(poly):
     while i < len(poly):
         if type(poly[i]) not in (int, float):
             return None
+        elif len(poly) == 1:
+            derivate.append(0)
         else:
             if i == 0:
                 i += 1
