@@ -15,8 +15,8 @@ This project is to learn about probability, probability distribution, union, int
 | [binomial.py](binomial.py) | Class Binomial that represents a binomial distribution. |
 
 ## Build with
--Python (python 3.5)
--Numpy (numpy 1.15)
+- Python (python 3.5)
+- Numpy (numpy 1.15)
 
 ## Author
 
