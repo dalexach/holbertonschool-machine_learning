@@ -21,7 +21,7 @@ class Exponential:
         in a given time frame
         """
         if data is None:
-            if lambtha < 0:
+            if lambtha <= 0:
                 raise ValueError("lambtha must be a positive value")
             else:
                 self.lambtha = float(lambtha)
@@ -44,7 +44,7 @@ class Exponential:
         if x <= 0:
             return 0
 
-        pdf = self.lambtha * pow(self.e, (-1 * self.lambtha * x))
+        pdf = self.lambtha * pow(Exponential.e, (-1 * self.lambtha * x))
 
         return pdf
 
@@ -59,6 +59,6 @@ class Exponential:
         if x <= 0:
             return 0
 
-        cdf = 1 - pow(self.e, (-1 * self.lambtha * x))
+        cdf = 1 - pow(Exponential.e, (-1 * self.lambtha * x))
 
         return cdf
