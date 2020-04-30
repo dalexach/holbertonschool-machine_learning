@@ -20,16 +20,18 @@ class Exponential:
         - lambtha (int/float): is the expected number of occurences
         in a given time frame
         """
-        self.lambtha = float(lambtha)
         if data is None:
             if lambtha < 0:
                 raise ValueError("lambtha must be a positive value")
+            else:
+                self.lambtha = float(lambtha)
         else:
             if type(data) is not list:
                 raise TypeError("data must be a list")
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            self.lambtha = 1 / float(sum(data) / len(data))
+            else:
+                self.lambtha = 1 / float(sum(data) / len(data))
 
     def pdf(self, x):
         """
@@ -39,7 +41,7 @@ class Exponential:
         Return:
          The PDF value for x
         """
-        if x < 0:
+        if x <= 0:
             return 0
 
         pdf = self.lambtha * pow(self.e, (-1 * self.lambtha * x))
@@ -54,7 +56,7 @@ class Exponential:
         Return:
          The CDF value for x
         """
-        if x < 0:
+        if x <= 0:
             return 0
 
         cdf = 1 - pow(self.e, (-1 * self.lambtha * x))
