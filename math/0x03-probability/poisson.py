@@ -64,10 +64,10 @@ class Poisson:
         k = int(k)
         res = 0
 
-        for n in range(1, k + 1):
+        for n in range(k + 1):
             res += (pow(self.lambtha, n) / Poisson.factorial(n))
 
-        cdf = res * pow(self.e, -1 * self.lambtha)
+        cdf = res * pow(Poisson.e, -self.lambtha)
         return cdf
 
     def factorial(n):
