@@ -41,7 +41,7 @@ class Exponential:
         Return:
          The PDF value for x
         """
-        if x <= 0:
+        if x < 0:
             return 0
 
         pdf = self.lambtha * pow(Exponential.e, (-1 * self.lambtha * x))
@@ -56,7 +56,7 @@ class Exponential:
         Return:
          The CDF value for x
         """
-        if x <= 0:
+        if x < 0:
             return 0
 
         cdf = 1 - pow(Exponential.e, (-1 * self.lambtha * x))
