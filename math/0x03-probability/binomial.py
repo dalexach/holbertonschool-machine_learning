@@ -24,7 +24,7 @@ class Binomial:
         if data is None:
             if n <= 0:
                 raise ValueError("n must be a positive value")
-            elif p <=0 or p >= 1:
+            elif p <= 0 or p >= 1:
                 raise ValueError("p must be greater than 0 and less than 1")
             else:
                 self.n = int(n)
@@ -61,8 +61,8 @@ class Binomial:
         k_fact = Binomial.factorial(k)
         nk_fact = Binomial.factorial(self.n - k)
 
-        pmf = ((n_fact /(k_fact * nk_fact))
-                * (pow(self.p, k) * pow((1 - self.p), (self.n - k))))
+        pmf = ((n_fact / (k_fact * nk_fact))
+               * (pow(self.p, k) * pow((1 - self.p), (self.n - k))))
 
         return pmf
 
@@ -80,7 +80,7 @@ class Binomial:
 
         k = int(k)
         cdf = 0
-        
+
         for i in range(k + 1):
             cdf += self.pmf(i)
 
