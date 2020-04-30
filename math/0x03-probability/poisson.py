@@ -21,7 +21,7 @@ class Poisson:
         in a given time frame
         """
         if data is None:
-            if lambtha < 0:
+            if lambtha <= 0:
                 raise ValueError("lambtha must be a positive value")
             else:
                 self.lambtha = float(lambtha)
@@ -44,7 +44,7 @@ class Poisson:
             return 0
         k = int(k)
         fact_k = 1
-        for x in range(1, k+1):
+        for x in range(1, k + 1):
             fact_k = x * fact_k
 
         pmf = (pow(self.e, self.lambtha * -1)
@@ -62,10 +62,20 @@ class Poisson:
             return 0
 
         k = int(k)
+        res = 0
 
-        cdf = 0
+        for n in range(1, k + 1):
+            res += (pow(self.lambtha, n) / Poisson.factorial(n))
 
-        for n in range(1, k+1):
-            cdf += (self.pmf(n))
-
+        cdf = res * pow(self.e, -1 * self.lambtha)
         return cdf
+
+    def factorial(n):
+        """
+        Function to calculate the factorial of a number
+        """
+        fact = 1
+        for x in range(1, n + 1):
+            fact = x * fact
+
+        return fact
