@@ -36,7 +36,7 @@ class Normal:
                 self.mean = float(sum(data) / len(data))
                 suma = 0
                 for i in data:
-                    suma += pow((i - self.mean),2)
+                    suma += pow((i - self.mean), 2)
                 self.stddev = pow(suma / len(data), 1/2)
 
     def z_score(self, x):
