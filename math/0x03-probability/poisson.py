@@ -29,7 +29,7 @@ class Poisson:
                 raise TypeError("data must be a list")
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            self.lambtha = sum(data) / len(data)
+            self.lambtha = float(sum(data) / len(data))
 
     def pmf(self, k):
         """
@@ -38,8 +38,9 @@ class Poisson:
         Arguments:
          - k (int/float): number of "successes"
         """
-        if type(k) is not int:
-            self.k = int(k)
+        if k <= 0:
+            return 0
+        k = int(k)
         fact_k = 1
         for x in range(1, k+1):
             fact_k = x * fact_k
@@ -55,11 +56,10 @@ class Poisson:
         Arguments:
          - k (int/float): number of "successes"
         """
-        if k < 0:
+        if k <= 0:
             return 0
 
-        if type(k) is not int:
-            self.k = int(k)
+        k = int(k)
 
         cdf = 0
 
