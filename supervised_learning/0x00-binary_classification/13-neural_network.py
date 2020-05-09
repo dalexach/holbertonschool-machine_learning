@@ -169,18 +169,18 @@ class NeuralNetwork:
          - alpha is the learning rate
         Updates the private attributes __W1, __b1, __W2, and __b2
         """
-        m = Y.shape[1]
+        m = A1.shape[1]
         dZ2 = A2 - Y
-        dW2 = (1 / m) * np.matmul(X, dZ2.T)
+        dW2 = (1 / m) * np.matmul(A1, dZ2.T)
         db2 = (1 / m) * np.sum(dZ2, axis=1, keepdims=True)
 
-        g1 = A1 * (1 - A1) 
-        dZ1 = np.matmul(self.__W2.T, dZ2) * g1
-        dW1 = (1 / m) * np.matmul(dZ1, X.T)
+        g1 = A1 * (1 - A1)
+        dZ1 = np.multiply(np.matmul(self.__W2.T, dZ2), g1)
+        dW1 = (1 / m) * np.matmul(X, dZ1.T)
         db1 = (1 / m) * np.sum(dZ1, axis=1, keepdims=True)
 
-        self.__W2 = self.__W2 - alpha * dW2
+        self.__W2 = self.__W2 - (alpha * dW2).T
         self.__b2 = self.__b2 - alpha * db2
 
-        self.__W1 = self.__W1 - alpha * dW1
+        self.__W1 = self.__W1 - (alpha * dW1).T
         self.__b1 = self.__b1 - alpha * db1
