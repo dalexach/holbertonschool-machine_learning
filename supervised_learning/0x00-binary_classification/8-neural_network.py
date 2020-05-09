@@ -21,7 +21,8 @@ class NeuralNetwork:
          - nodes (int):  is the number of nodes found in the hidden layer
         Public instance attributes:
          - W1: The weights vector for the hidden layer.
-               Upon instantiation, it should be initialized using a random normal distribution.
+               Upon instantiation, it should be initialized using a random
+               normal distribution.
          - b1: The weights vector for the hidden layer. Upon instantiation,
                it should be initialized using a random normal distribution.
          - A1: The activated output for the hidden layer. Upon instantiation,
