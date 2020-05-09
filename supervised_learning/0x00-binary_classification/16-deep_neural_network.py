@@ -53,5 +53,5 @@ class DeepNeuralNetwork:
                 w = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
             else:
                 w = np.random.randn(layers[i], layers[i - 1])
-                w *= np.sqrt(2 / layers[i - 1])
+                w = w * np.sqrt(2 / layers[i - 1])
             self.weights[wkey] = w
