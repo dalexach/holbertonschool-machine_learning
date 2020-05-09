@@ -30,7 +30,7 @@ class DeepNeuralNetwork:
         if nx < 1:
             raise ValueError("nx must be a positive integer")
 
-        if type(layers) is not list or len(layers) < 1:
+        if type(layers) is not list or len(layers) == 1:
             raise TypeError("layers must be an integer")
 
         # public intance attributes
@@ -41,7 +41,7 @@ class DeepNeuralNetwork:
         self.weights = {}
 
         for i in range(self.L):
-            if type(layers[i]) is not int or layers[i] < 1:
+            if type(layers[i]) is not int or layers[i] <= 0:
                 raise TypeError("layers must be an integer")
 
             wkey = "W{}".format(i + 1)
