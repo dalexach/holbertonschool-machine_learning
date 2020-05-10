@@ -223,7 +223,6 @@ class NeuralNetwork:
         step_list = []
         for i in range(iterations + 1):
             self.forward_prop(X)
-            #self.__A1, self.__A2 = self.forward_prop(X)
             self.gradient_descent(X, Y, self.__A1, self.__A2, alpha)
             cost = self.cost(Y, self.__A2)
 
