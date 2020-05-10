@@ -108,8 +108,10 @@ class DeepNeuralNetwork:
         """
         Calculates the cost of the model using logistic regression
         Arguments:
-         - Y (numpy.ndarray): with shape (1, m) that contains the correct labels for the input data
-         - A (numpy.ndarray): with shape (1, m) containing the activated output of the neuron for each example
+         - Y (numpy.ndarray): with shape (1, m) that contains the correct
+                              labels for the input data
+         - A (numpy.ndarray): with shape (1, m) containing the activated output
+                              of the neuron for each example
         Returns:
          The cost
         """
