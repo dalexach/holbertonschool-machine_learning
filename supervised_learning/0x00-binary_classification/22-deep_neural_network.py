@@ -178,7 +178,7 @@ class DeepNeuralNetwork:
          - Y (numpy.ndarray):  with shape (1, m) that contains the correct
               labels for the input data
          - iterations (int): is the number of iterations to train over
-         - alpha (float): is the learning rate 
+         - alpha (float): is the learning rate
         """
 
         if type(iterations) is not int:
