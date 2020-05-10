@@ -101,5 +101,5 @@ class DeepNeuralNetwork:
 
             Z = np.matmul(W, Aprev) + b
             self.__cache[Akey] = 1 / (1 + np.exp(-Z))
-            
+
         return (self.__cache[Akey], self.__cache)
