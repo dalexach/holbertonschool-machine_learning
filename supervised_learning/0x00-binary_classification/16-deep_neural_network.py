@@ -32,7 +32,7 @@ class DeepNeuralNetwork:
 
         if type(layers) is not list:
             raise TypeError("layers must be an integer")
-        if len(layers) == 0:
+        if len(layers) == 0 or not layers:
             raise TypeError("layers must be an integer")
 
         # public intance attributes
