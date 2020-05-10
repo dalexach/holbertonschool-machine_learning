@@ -166,4 +166,4 @@ class DeepNeuralNetwork:
             dAl = np.matmul(W.T, dZ)
 
             self.__weights[wkey] = self.__weights[wkey] - alpha * dW
-            self.__weights[bkey] = self.__weights[bkey] - alpha *db
+            self.__weights[bkey] = self.__weights[bkey] - alpha * db
