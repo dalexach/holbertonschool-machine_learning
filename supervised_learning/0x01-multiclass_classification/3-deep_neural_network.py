@@ -103,7 +103,7 @@ class DeepNeuralNetwork:
 
             Z = np.matmul(W, Aprev) + b
 
-            if i is self.__L:
+            if i is self.__L - 1:
                 t = np.exp(Z)
                 self.cache[Akey] = t / np.sum(t, axis=0, keepdims=True)
             else:
@@ -142,10 +142,12 @@ class DeepNeuralNetwork:
         Returns:
          The neuron’s prediction and the cost of the network, respectively
         """
-        A, self.__cache = self.forward_prop(X)
-        cost = self.cost(Y, A)
+        self.forward_prop(X)[0]
+        tmp = np.amax(self.__cache["A{}".format(self.__L)], axis=0)
+        cost = self.cost(Y, self.__cache["A{}".format(self.__L)])
+        aux = np.where(self.__cache["A{}".format(self.__L)] == temp, 1, 0)
 
-        return (np.round(A).astype(int), cost)
+        return (aux, cost)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -213,14 +215,14 @@ class DeepNeuralNetwork:
         cost_list = []
         step_list = []
         for i in range(iterations + 1):
-            A, self.__cache = self.forward_prop(X)
+            self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
             # cost = self.cost(Y, A)
-            cost = self.cost(Y, self.__cache["A{}".format(self.__L)])
+            cost = self.cost(Y, self.__cache["A{}".format(self.L)])
+            cost_list.append(cost)
 
             if verbose:
                 if i % step == 0 or step == iterations:
-                    cost_list.append(cost)
                     step_list.append(i)
                     print("Cost after {} iterations: {}".format(i, cost))
 
