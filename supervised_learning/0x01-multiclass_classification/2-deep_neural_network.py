@@ -137,9 +137,10 @@ class DeepNeuralNetwork:
          The neuron’s prediction and the cost of the network, respectively
         """
         A, self.__cache = self.forward_prop(X)
+        evaluated = np.where(A >= 0.5, 1, 0)
         cost = self.cost(Y, A)
 
-        return (np.round(A).astype(int), cost)
+        return (evaluated, cost)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
