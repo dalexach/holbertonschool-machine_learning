@@ -137,10 +137,10 @@ class DeepNeuralNetwork:
          The neuron’s prediction and the cost of the network, respectively
         """
         A, self.__cache = self.forward_prop(X)
-        evaluated = np.where(A >= 0.5, 1, 0)
+        e  = np.where(A >= 0.5, 1, 0)
         cost = self.cost(Y, A)
 
-        return (evaluated, cost)
+        return (e, cost)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -211,10 +211,10 @@ class DeepNeuralNetwork:
             A, self.__cache = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
             cost = self.cost(Y, A)
-            cost_list.append(cost)
 
             if verbose:
                 if i % step == 0 or step == iterations:
+                    cost_list.append(cost)
                     step_list.append(i)
                     print("Cost after {} iterations: {}".format(i, cost))
 
