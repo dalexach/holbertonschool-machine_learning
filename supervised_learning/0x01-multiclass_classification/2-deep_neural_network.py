@@ -49,7 +49,7 @@ class DeepNeuralNetwork:
             wkey = "W{}".format(i + 1)
             bkey = "b{}".format(i + 1)
 
-            self.__weights[bkey] = np.zeros((layers[i], 1))
+            self.weights[bkey] = np.zeros((layers[i], 1))
 
             if i == 0:
                 w = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
@@ -120,13 +120,13 @@ class DeepNeuralNetwork:
         y1 = 1 - Y
         y2 = 1.0000001 - A
         m = Y.shape[1]
-        cost = -1 * (1 / m) * np.sum(Y * np.log(A) + y1 * np.log(y2))
+        cost = -np.sum(Y * np.log(A) + y1 * np.log(y2)) / m
 
         return cost
 
     def evaluate(self, X, Y):
         """
-        Evaluates the neural network’s predictions
+        Evaluates the neural networks predictions
         Arguments:
          - X is a numpy.ndarray with shape (nx, m) that contains the input data
            * nx is the number of input features to the neuron
@@ -134,12 +134,13 @@ class DeepNeuralNetwork:
          - Y (numpy.ndarray): with shape (1, m) that contains the correct
              labels for the input data
         Returns:
-         The neuron’s prediction and the cost of the network, respectively
+         The neurons prediction and the cost of the network, respectively
         """
-        A, self.__cache = self.forward_prop(X)
-        cost = self.cost(Y, A)
+        A = self.forward_prop(X)[0]
+	A_round = np.where(A >= 0.5, 1, 0)
+        cost = self.cost(Y, A_round)
 
-        return (np.round(A).astype(int), cost)
+        return (A_round, cost)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -152,23 +153,26 @@ class DeepNeuralNetwork:
          - alpha (float): is the learning rate
         """
         m = Y.shape[1]
-        Al = cache["A{}".format(self.__L)]
-        dAl = (-1 * (Y / Al)) + (1 - Y)/(1 - Al)
 
-        for i in reversed(range(1, self.__L + 1)):
-            wkey = "W{}".format(i)
-            bkey = "b{}".format(i)
+        for i in reversed(range(self.__L)):
+            wkey = "W{}".format(i + 1)
+            wkey2 = "W{}".format(i + 2)
+            bkey = "b{}".format(i + 1)
+
+            if i == self.__L:
+                dZ = cache["A{}".format(i)] - Y
+            else:
+                Al1 = cache["A{}".format(i + 1)]
+                dz = np.matmul(self.__weights[wkey2].T, dZ)
+                g = Al1 * (1 - Al1)
+                dZ = dz * g
+
             Al = cache["A{}".format(i)]
-            Al1 = cache["A{}".format(i - 1)]
-            g = Al * (1 - Al)
-            dZ = np.multiply(dAl, g)
-            dW = (1 / m) * np.matmul(dZ, Al1.T)
-            db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
-            W = self.__weights["W{}".format(i)]
-            dAl = np.matmul(W.T, dZ)
+            dW = np.matmul(dZ, Al.T) / m
+            db = np.sum(dZ, axis=1, keepdims=True) / m
 
-            self.__weights[wkey] = self.__weights[wkey] - alpha * dW
-            self.__weights[bkey] = self.__weights[bkey] - alpha * db
+            self.__weights[wkey] = self.__weights[wkey] - (alpha * dW)
+            self.__weights[bkey] = self.__weights[bkey] - (alpha * db)
 
     def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True,
               graph=True, step=100):
@@ -206,16 +210,16 @@ class DeepNeuralNetwork:
 
         cost_list = []
         step_list = []
-        for i in range(iterations + 1):
+        for i in range(iterations):
             A, self.__cache = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
             # cost = self.cost(Y, A)
             cost = self.cost(Y, self.__cache["A{}".format(self.__L)])
 
-            if verbose:
-                if i % step == 0 or step == iterations:
-                    cost_list.append(cost)
-                    step_list.append(i)
+            if i % step == 0 or step == iterations:
+                cost_list.append(cost)
+                step_list.append(i)
+                if verbose:
                     print("Cost after {} iterations: {}".format(i, cost))
 
         if graph:
