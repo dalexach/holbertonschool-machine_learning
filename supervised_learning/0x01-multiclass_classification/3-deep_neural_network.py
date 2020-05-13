@@ -90,7 +90,7 @@ class DeepNeuralNetwork:
            * nx is the number of input features to the neuron
            * m is the number of examples
         """
-        self.cache['A0'] = X
+        self.__cache['A0'] = X
 
         for i in range(self.__L):
             wkey = "W{}".format(i + 1)
@@ -103,11 +103,12 @@ class DeepNeuralNetwork:
 
             Z = np.matmul(W, Aprev) + b
 
-            if i is self.__L - 1:
-                t = np.exp(Z)
-                self.cache[Akey] = t / np.sum(t, axis=0, keepdims=True)
+            if i != self.__L - 1:
+                self.__cache[Akey] = 1 / (1 + np.exp(-Z))
             else:
-                self.cache[Akey] = 1 / (1 + np.exp(-Z))
+                t = np.exp(Z)
+                a = np.exp(Z) / np.sum(t, axis=0, keepdims=True)
+                self.__cache[Akey] = a
 
         return (self.__cache[Akey], self.__cache)
 
@@ -122,11 +123,10 @@ class DeepNeuralNetwork:
         Returns:
          The cost
         """
-        y1 = 1 - Y
+        # y1 = 1 - Y
         # y2 = 1.0000001 - A
         m = Y.shape[1]
-        # cost = -1 * (1 / m) * np.sum(Y * np.log(A) + y1 * np.log(y2))
-        cost = -np.sum(Y * np.log(A), axix=1, keepdims=True) / m
+        cost = -np.sum(Y * np.log(A), axis=1, keepdims=True) / m
 
         return cost
 
@@ -142,11 +142,10 @@ class DeepNeuralNetwork:
         Returns:
          The neuron’s prediction and the cost of the network, respectively
         """
-        A, cache = self.forward_prop(X)
-        tmp = np.where(A == np.amaz(A, axis=0), 1, 0)
+        A, self.__cache = self.forward_prop(X)
         cost = self.cost(Y, A)
 
-        return (A, cost)
+        return (np.round(A).astype(int), cost)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -214,14 +213,14 @@ class DeepNeuralNetwork:
         cost_list = []
         step_list = []
         for i in range(iterations):
-            self.forward_prop(X)
+            A, self.__cache = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
             # cost = self.cost(Y, A)
-            cost = self.cost(Y, self.__cache["A{}".format(self.L)])
+            cost = self.cost(Y, self.__cache["A{}".format(self.__L)])
 
-            if not i % step:
-                step_list.append(i)
+            if not i % 100:
                 cost_list.append(cost)
+                step_list.append(i)
                 if verbose:
                     print("Cost after {} iterations: {}".format(i, cost))
 
