@@ -176,15 +176,22 @@ class DeepNeuralNetwork:
         """
         m = Y.shape[1]
         Al = cache["A{}".format(self.__L)]
-        dAl = (-1 * (Y / Al)) + (1 - Y)/(1 - Al)
+        # dAl = (-1 * (Y / Al)) + (1 - Y)/(1 - Al)
+        dAl = Al - Y
 
         for i in reversed(range(1, self.__L + 1)):
             wkey = "W{}".format(i)
             bkey = "b{}".format(i)
             Al = cache["A{}".format(i)]
+            if self.__activation == 'sig':
+                g = Al * (1 - Al)
+            else:
+                g = 1 - np-power(Al, 2)
+            if i == self.__L:
+                dZ = dAl
+            else:
+                dZ = dAl * g
             Al1 = cache["A{}".format(i - 1)]
-            g = Al * (1 - Al)
-            dZ = np.multiply(dAl, g)
             dW = (1 / m) * np.matmul(dZ, Al1.T)
             db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
             W = self.__weights["W{}".format(i)]
@@ -229,17 +236,23 @@ class DeepNeuralNetwork:
 
         cost_list = []
         step_list = []
-        for i in range(iterations + 1):
+        for i in range(iterations):
             self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
             # cost = self.cost(Y, A)
             cost = self.cost(Y, self.__cache["A{}".format(self.L)])
-            cost_list.append(cost)
 
-            if verbose:
-                if i % step == 0 or step == iterations:
-                    step_list.append(i)
+            if i % step == 0 or step == iterations:
+                cost_list.append(cost)
+                step_list.append(i)
+                if verbose:
                     print("Cost after {} iterations: {}".format(i, cost))
+
+        A, cost = self.evaluate(X, Y)
+        cost_list.append(cost)
+        step_list.append(iterations)
+        if verbose:
+            print("Cost after {} iterations: {}".format(iterations, cost))
 
         if graph:
             plt.plot(step_list, cost_list)
@@ -248,7 +261,7 @@ class DeepNeuralNetwork:
             plt.title("Trainig Cost")
             plt.show()
 
-        return self.evaluate(X, Y)
+        return A, cost
 
     def save(self, filename):
         """
