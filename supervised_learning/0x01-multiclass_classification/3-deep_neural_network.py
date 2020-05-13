@@ -126,7 +126,7 @@ class DeepNeuralNetwork:
         # y2 = 1.0000001 - A
         m = Y.shape[1]
         # cost = -1 * (1 / m) * np.sum(Y * np.log(A) + y1 * np.log(y2))
-        cost = -1 * (1 / m) * np.sum(Y * np.log(A))
+        cost = -np.sum(Y * np.log(A), axix=1, keepdims=True) / m
 
         return cost
 
@@ -142,12 +142,11 @@ class DeepNeuralNetwork:
         Returns:
          The neuron’s prediction and the cost of the network, respectively
         """
-        self.forward_prop(X)[0]
-        tmp = np.amax(self.__cache["A{}".format(self.__L)], axis=0)
-        cost = self.cost(Y, self.__cache["A{}".format(self.__L)])
-        aux = np.where(self.__cache["A{}".format(self.__L)] == temp, 1, 0)
+        A, cache = self.forward_prop(X)
+        tmp = np.where(A == np.amaz(A, axis=0), 1, 0)
+        cost = self.cost(Y, A)
 
-        return (aux, cost)
+        return (A, cost)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -219,11 +218,11 @@ class DeepNeuralNetwork:
             self.gradient_descent(Y, self.__cache, alpha)
             # cost = self.cost(Y, A)
             cost = self.cost(Y, self.__cache["A{}".format(self.L)])
-            cost_list.append(cost)
 
             if not i % step:
+                step_list.append(i)
+                cost_list.append(cost)
                 if verbose:
-                    step_list.append(i)
                     print("Cost after {} iterations: {}".format(i, cost))
 
         A, cost = self.evaluate(X, Y)
