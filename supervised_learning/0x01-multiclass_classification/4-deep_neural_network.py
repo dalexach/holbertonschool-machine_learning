@@ -175,7 +175,7 @@ class DeepNeuralNetwork:
         """
         m = Y.shape[1]
         Al = cache["A{}".format(self.__L)]
-        dAl = (-1 * (Y / Al)) + (1 - Y)/(1 - Al)
+        dAl = Al - Y
 
         for i in reversed(range(1, self.__L + 1)):
             wkey = "W{}".format(i)
