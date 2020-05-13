@@ -137,7 +137,7 @@ class DeepNeuralNetwork:
          The neurons prediction and the cost of the network, respectively
         """
         A = self.forward_prop(X)[0]
-	A_round = np.where(A >= 0.5, 1, 0)
+        A_round = np.where(A >= 0.5, 1, 0)
         cost = self.cost(Y, A_round)
 
         return (A_round, cost)
@@ -153,26 +153,23 @@ class DeepNeuralNetwork:
          - alpha (float): is the learning rate
         """
         m = Y.shape[1]
+        Al = cache["A{}".format(self.__L)]
+        dAl = (-1 * (Y / Al)) + (1 - Y)/(1 - Al)
 
-        for i in reversed(range(self.__L)):
-            wkey = "W{}".format(i + 1)
-            wkey2 = "W{}".format(i + 2)
-            bkey = "b{}".format(i + 1)
-
-            if i == self.__L:
-                dZ = cache["A{}".format(i)] - Y
-            else:
-                Al1 = cache["A{}".format(i + 1)]
-                dz = np.matmul(self.__weights[wkey2].T, dZ)
-                g = Al1 * (1 - Al1)
-                dZ = dz * g
-
+        for i in reversed(range(1, self.__L + 1)):
+            wkey = "W{}".format(i)
+            bkey = "b{}".format(i)
             Al = cache["A{}".format(i)]
-            dW = np.matmul(dZ, Al.T) / m
-            db = np.sum(dZ, axis=1, keepdims=True) / m
+            Al1 = cache["A{}".format(i - 1)]
+            g = Al * (1 - Al)
+            dZ = np.multiply(dAl, g)
+            dW = (1 / m) * np.matmul(dZ, Al1.T)
+            db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
+            W = self.__weights["W{}".format(i)]
+            dAl = np.matmul(W.T, dZ)
 
-            self.__weights[wkey] = self.__weights[wkey] - (alpha * dW)
-            self.__weights[bkey] = self.__weights[bkey] - (alpha * db)
+            self.__weights[wkey] = self.__weights[wkey] - alpha * dW
+            self.__weights[bkey] = self.__weights[bkey] - alpha * db
 
     def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True,
               graph=True, step=100):
