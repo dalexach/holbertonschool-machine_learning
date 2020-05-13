@@ -35,7 +35,7 @@ class DeepNeuralNetwork:
         if type(layers) != list or len(layers) == 0:
             raise TypeError("layers must be a list of positive integers")
 
-        if activation != 'sig' and activation != 'thanh':
+        if activation not in ['sig', 'tanh']:
             raise ValueError("activation must be 'sig' or 'tanh'")
 
         # Private intance attributes
@@ -89,8 +89,8 @@ class DeepNeuralNetwork:
     @property
     def activation(self):
         """
-        getter gunction for activation
-        Returns activation
+        getter Acivation function
+        Return the activation
         """
         return self.__activation
 
@@ -102,7 +102,7 @@ class DeepNeuralNetwork:
            * nx is the number of input features to the neuron
            * m is the number of examples
         """
-        self.cache['A0'] = X
+        self.__cache['A0'] = X
 
         for i in range(self.__L):
             wkey = "W{}".format(i + 1)
@@ -116,13 +116,14 @@ class DeepNeuralNetwork:
             Z = np.matmul(W, Aprev) + b
 
             if i != self.__L - 1:
-                if self.__activation == "sig":
-                    self.cache[Akey] = 1 / (1 + np.exp(-Z))
-                else:
-                    self.cache[Akey] = np.thanh(Z)
+                if self.__activation == 'sig':
+                    self.__cache[Akey] = 1 / (1 + np.exp(-Z))
+                elif self.__activation == 'tanh':
+                    self.__cache[Akey] = np.sinh(Z) / np.cosh(Z)
             else:
                 t = np.exp(Z)
-                self.cache[Akey] = t / np.sum(t, axis=0, keepdims=True)
+                a = np.exp(Z) / np.sum(t, axis=0, keepdims=True)
+                self.__cache[Akey] = a
 
         return (self.__cache[Akey], self.__cache)
 
@@ -137,13 +138,12 @@ class DeepNeuralNetwork:
         Returns:
          The cost
         """
-        y1 = 1 - Y
+        # y1 = 1 - Y
         # y2 = 1.0000001 - A
         m = Y.shape[1]
-        # cost = -1 * (1 / m) * np.sum(Y * np.log(A) + y1 * np.log(y2))
-        cost = -(1 / m) * np.sum(Y * np.log(A))
+        L = -np.sum(Y * np.log(A), axis=1, keepdims=True)
 
-        return cost
+        return np.sum(L) / m
 
     def evaluate(self, X, Y):
         """
@@ -157,10 +157,9 @@ class DeepNeuralNetwork:
         Returns:
          The neuron’s prediction and the cost of the network, respectively
         """
-        self.forward_prop(X)[0]
-        tmp = np.amax(self.__cache["A{}".format(self.__L)], axis=0)
-        cost = self.cost(Y, self.__cache["A{}".format(self.__L)])
-        aux = np.where(self.__cache["A{}".format(self.__L)] == temp, 1, 0)
+        A, self.__cache = self.forward_prop(X)
+        aux = np.where(A == np.amax(A, axis=0), 1, 0)
+        cost = self.cost(Y, A)
 
         return (aux, cost)
 
@@ -176,21 +175,23 @@ class DeepNeuralNetwork:
         """
         m = Y.shape[1]
         Al = cache["A{}".format(self.__L)]
-        # dAl = (-1 * (Y / Al)) + (1 - Y)/(1 - Al)
-        dAl = Al - Y
+        dAl = (-1 * (Y / Al)) + (1 - Y)/(1 - Al)
 
         for i in reversed(range(1, self.__L + 1)):
             wkey = "W{}".format(i)
             bkey = "b{}".format(i)
             Al = cache["A{}".format(i)]
+
             if self.__activation == 'sig':
                 g = Al * (1 - Al)
             else:
-                g = 1 - np-power(Al, 2)
+                g = 1 - np.power(Al, 2)
+
             if i == self.__L:
                 dZ = dAl
             else:
                 dZ = dAl * g
+
             Al1 = cache["A{}".format(i - 1)]
             dW = (1 / m) * np.matmul(dZ, Al1.T)
             db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
@@ -237,12 +238,12 @@ class DeepNeuralNetwork:
         cost_list = []
         step_list = []
         for i in range(iterations):
-            self.forward_prop(X)
+            A, self.__cache = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
             # cost = self.cost(Y, A)
-            cost = self.cost(Y, self.__cache["A{}".format(self.L)])
+            cost = self.cost(Y, self.__cache["A{}".format(self.__L)])
 
-            if i % step == 0 or step == iterations:
+            if not i % 100:
                 cost_list.append(cost)
                 step_list.append(i)
                 if verbose:
