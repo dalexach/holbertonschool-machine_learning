@@ -49,7 +49,7 @@ class DeepNeuralNetwork:
             wkey = "W{}".format(i + 1)
             bkey = "b{}".format(i + 1)
 
-            self.weights[bkey] = np.zeros((layers[i], 1))
+            self.__weights[bkey] = np.zeros((layers[i], 1))
 
             if i == 0:
                 w = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
@@ -120,13 +120,13 @@ class DeepNeuralNetwork:
         y1 = 1 - Y
         y2 = 1.0000001 - A
         m = Y.shape[1]
-        cost = -np.sum(Y * np.log(A) + y1 * np.log(y2)) / m
+        cost = -1 * (1 / m) * np.sum(Y * np.log(A) + y1 * np.log(y2))
 
         return cost
 
     def evaluate(self, X, Y):
         """
-        Evaluates the neural networks predictions
+        Evaluates the neural network’s predictions
         Arguments:
          - X is a numpy.ndarray with shape (nx, m) that contains the input data
            * nx is the number of input features to the neuron
@@ -134,13 +134,12 @@ class DeepNeuralNetwork:
          - Y (numpy.ndarray): with shape (1, m) that contains the correct
              labels for the input data
         Returns:
-         The neurons prediction and the cost of the network, respectively
+         The neuron’s prediction and the cost of the network, respectively
         """
-        A = self.forward_prop(X)[0]
-        A_round = np.where(A >= 0.5, 1, 0)
-        cost = self.cost(Y, A_round)
+        A, self.__cache = self.forward_prop(X)
+        cost = self.cost(Y, A)
 
-        return (A_round, cost)
+        return (np.round(A).astype(int), cost)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -207,16 +206,16 @@ class DeepNeuralNetwork:
 
         cost_list = []
         step_list = []
-        for i in range(iterations):
+        for i in range(iterations + 1):
             A, self.__cache = self.forward_prop(X)
             self.gradient_descent(Y, self.__cache, alpha)
             # cost = self.cost(Y, A)
             cost = self.cost(Y, self.__cache["A{}".format(self.__L)])
 
-            if i % step == 0 or step == iterations:
-                cost_list.append(cost)
-                step_list.append(i)
-                if verbose:
+            if verbose:
+                if i % step == 0 or step == iterations:
+                    cost_list.append(cost)
+                    step_list.append(i)
                     print("Cost after {} iterations: {}".format(i, cost))
 
         if graph:
