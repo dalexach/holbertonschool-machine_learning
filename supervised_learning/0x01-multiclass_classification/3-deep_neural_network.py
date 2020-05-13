@@ -126,9 +126,9 @@ class DeepNeuralNetwork:
         # y1 = 1 - Y
         # y2 = 1.0000001 - A
         m = Y.shape[1]
-        cost = -np.sum(Y * np.log(A), axis=1, keepdims=True) / m
+        L = -np.sum(Y * np.log(A), axis=1, keepdims=True)
 
-        return cost
+        return np.sum(L) / m
 
     def evaluate(self, X, Y):
         """
@@ -143,9 +143,10 @@ class DeepNeuralNetwork:
          The neuron’s prediction and the cost of the network, respectively
         """
         A, self.__cache = self.forward_prop(X)
+        aux = np.where(A == np.amax(A, axis=0), 1, 0)
         cost = self.cost(Y, A)
 
-        return (np.round(A).astype(int), cost)
+        return (aux, cost)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
