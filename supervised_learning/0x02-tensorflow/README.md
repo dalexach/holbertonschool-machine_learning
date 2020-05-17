@@ -33,9 +33,9 @@ General
 
 
 ## Build with
--Python (python 3.5)
--Numpy (numpy 1.15)
--Ubuntu 16.04 LTS 
+- Python (python 3.5)
+- Numpy (numpy 1.15)
+- Ubuntu 16.04 LTS 
 
 ## Author
 
