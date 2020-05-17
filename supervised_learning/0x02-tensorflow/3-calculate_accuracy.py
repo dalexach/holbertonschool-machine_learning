@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Function calculate_accurancy 
+Function calculate_accurancy
 """
 
 
