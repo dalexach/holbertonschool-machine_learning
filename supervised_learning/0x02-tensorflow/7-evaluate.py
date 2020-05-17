@@ -31,4 +31,4 @@ def evaluate(X, Y, save_path):
         cost = sess.run(loss, feed_dict={x: X, y: Y})
         accu = sess.run(accuracy, feed_dict={x: X, y: Y})
 
-        return y_predic, accu, cost
+        return prediction, accu, cost
