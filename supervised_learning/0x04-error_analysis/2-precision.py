@@ -17,7 +17,7 @@ def precision(confusion):
     A numpy.ndarray of shape (classes,) containing the precision of each class
     """
     TP = np.diag(confusion)
-    FP = confusion.sum(axis=0) - TP
+    FP = np.sum(confusion, axis=0) - TP
     PRECISION = TP / (TP + FP)
 
     return PRECISION
