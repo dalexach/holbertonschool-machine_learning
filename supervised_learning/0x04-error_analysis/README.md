@@ -1,6 +1,6 @@
 # [holbertonschool-machine_learning](https://github.com/dalexach/holbertonschool-machine_learning)
 
-# 
+# 0x04. Error Analysis
 ### Description 
 
 
@@ -18,9 +18,9 @@
 | [6-compare_and_contrast](6-compare_and_contrast) | Given the following training and validation confusion matrices and the fact that human level performance has an error of ~14%, determine what the most important issue is. |
 
 ## Build with
--Python (python 3.5)
--Numpy (numpy 1.15)
--Ubuntu 16.04 LTS 
+- Python (python 3.5)
+- Numpy (numpy 1.15)
+- Ubuntu 16.04 LTS 
 
 ## Author
 
