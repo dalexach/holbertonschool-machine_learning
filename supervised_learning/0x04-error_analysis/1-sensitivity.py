@@ -20,7 +20,7 @@ def sensitivity(confusion):
     of each class
     """
     TP = np.diag(confusion)
-    FN = confusion.sum(axis=1) - TP
+    FN = np.sum(confusion, axis=1) - TP
     SENSITIVITY = TP / (TP + FN)
 
     return SENSITIVITY
