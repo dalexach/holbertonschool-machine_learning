@@ -2,7 +2,7 @@
 
 # 0x04. Error Analysis
 ### Description 
-
+Learning about confusion matrix, type I and II error, sensitivity, precision, specificity, recall, F1 score, bias, variance Bayes error, how to calculate them and aproximate to the best.
 
 ## Files
 #### Mandatory Tasks
