@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+Precision function
 """
 
 import numpy as np
