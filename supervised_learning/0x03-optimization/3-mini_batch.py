@@ -71,7 +71,7 @@ def train_mini_batch(X_train, Y_train, X_valid, Y_valid,
                                        feed_dict={x: X_train, y: Y_train})
             loss_v, acc_v = sess.run((loss, accuracy),
                                      feed_dict={x: X_valid, y: Y_valid})
-            print('After {} epochs:'.format(e))
+            print('After {} epochs:'.format(i))
             print('\tTraining Cost: {}'.format(loss_tr))
             print('\tTraining Accuracy: {}'.format(acc_tr))
             print('\tValidation Cost: {}'.format(loss_v))
