@@ -4,9 +4,6 @@ Moving average
 """
 
 
-import numpy as np
-
-
 def moving_average(data, beta):
     """
     Function that calculates the weighted moving average of a data set:
