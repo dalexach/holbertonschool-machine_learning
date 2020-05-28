@@ -19,8 +19,8 @@ def create_batch_norm_layer(prev, n, activation):
      A tensor of the activated output for the layer
     """
 
-    kernel_ini = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
-    layer = tf.layers.Dense(units=n, kernel_initialzier=kernel_ini)
+    kernel_in = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+    layer = tf.layers.Dense(units=n, kernel_initializer=kernel_in)
 
     z = layer(prev)
 
