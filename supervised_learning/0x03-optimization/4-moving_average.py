@@ -20,7 +20,7 @@ def moving_average(data, beta):
 
     for d in data:
         V = beta * V + (1 - beta) * d
-        correct = V / 1 - (beta ** t)
+        correct = V / (1 - (beta ** t))
         moving_average.append(correct)
         t += 1
 
