@@ -34,14 +34,14 @@ def convolve_grayscale_same(images, kernel):
 
     if not hkernel % 2:
         ph = int(hkernel / 2)
-        hfinal = himage - hkernel + 1 + (2 * ph)
+        hfinal = himage - hkernel + (2 * ph)
     else:
         ph = int((hkernel - 1) / 2)
         hfinal = himage - hkernel + 1 + (2 * ph)
 
     if not wkernel % 2:
         pw = int(wkernel / 2)
-        hfinal = wimage - wkernel + 1 + (2 * pw)
+        hfinal = wimage - wkernel + (2 * pw)
     else:
         pw = int((wkernel - 1) / 2)
         wfinal = wimage - wkernel + 1 + (2 * pw)
