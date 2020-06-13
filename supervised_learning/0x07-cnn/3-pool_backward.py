@@ -8,7 +8,7 @@ import numpy as np
 
 def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
     """
-    Function 
+    Function  that performs back propagation over a pooling layer of a NN
 
     Arguments:
      - dA is a numpy.ndarray of shape (m, h_new, w_new, c_new) containing
