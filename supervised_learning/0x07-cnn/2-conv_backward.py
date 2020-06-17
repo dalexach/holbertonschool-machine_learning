@@ -74,9 +74,9 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
         A_prev = np.pad(A_prev, pad_width=((0, 0), (ph, ph), (pw, pw), (0, 0)),
                         mode='constant', constant_values=0)
 
-    db = np.zeros(b.shape)
-    dA_prev = np.zeros(A_prev.shape)
     dW = np.zeros(W.shape)
+    dA_prev = np.zeros(A_prev.shape)
+    db = np.zeros(b.shape)
     db[:, :, 0, :] = np.sum(dZ, axis=(0, 1, 2))
 
     for i in range(m):
@@ -85,13 +85,11 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
                 for cn in range(c_new):
                     aux_W = W[:, :, :, cn]
                     aux_dZ = dZ[i, h, w, cn]
-                    aux_Aprev = A_prev[i,
-                                       h*sh:kh+(h*sh),
-                                       w*sh:kw+(w*sw)]
                     dA_prev[i,
-                            h*sh:kh+(h*sh),
-                            w*sh:kw+(w*sw)] += (aux_W * aux_dZ)
-                    dW[:, :, :, cn] += (aux_Aprev * aux_dZ)
+                            h * sh:kh + (h * sh),
+                            w * sw:kw + (w * sw)] += (aux_W * aux_dZ)
+                    dW[:, :, :, cn] += (A_prev[i, h * sh:kh + (h * sh),
+                                        w * sw:kw + (w * sw)] * aux_dZ)
 
     _, h_dA, w_dA, _ = dA_prev.shape
     dA_prev = dA_prev[:, ph:h_dA-ph, pw:w_dA-pw, :]
