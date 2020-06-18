@@ -21,3 +21,15 @@ def transition_layer(X, nb_filters, compression):
      The output of the transition layer
      and the number of filters within the output, respectively
     """
+
+    kernel_init = K.initializers.he_normal(seed=None)
+    nfc = int(nb_filters * compression)
+
+    batchNorm1 = K.layers.BatchNormalization()(X)
+    activation1 = K.layers.Activation('relu')(batchNorm1)
+    tlayer = K.layers.Conv2D(filters=nfc, kernel_size=1, padding='same',
+                             kernel_initializer=kernel_init)(activation1)
+    avg_pool = K.layers.AveragePooling2D(pool_size=(2, 2), strides=(2, 2),
+                                         padding='same')(tlayer)
+
+    return avg_pool, nfc
