@@ -28,3 +28,49 @@ def inception_block(A_prev, filters):
     Returns:
      The concatenated output of the inception block
     """
+    F1 = filters[0]
+    F3R = filters[1]
+    F3 = filters[2]
+    F5R = filters[3]
+    F5 = filters[4]
+    FPP = filters[5]
+    activation = 'relu'
+    kernel_init = K.initializers.he_normal(seed=None)
+
+    layer_1 = K.layers.Conv2D(filters=F1, kernel_size=1,
+                              padding='same',
+                              activation=activation,
+                              kernel_initializer=kernel_init)(A_prev)
+
+    layer_2R = K.layers.Conv2D(filters=F3R, kernel_size=1,
+                               padding='same',
+                               activation=activation,
+                               kernel_initializer=kernel_init)(A_prev)
+
+    layer_2 = K.layers.Conv2D(filters=F3, kernel_size=3,
+                              padding='same',
+                              activation=activation,
+                              kernel_initializer=kernel_init)(layer_2R)
+
+    layer_3R = K.layers.Conv2D(filters=F5R, kernel_size=1,
+                               padding='same',
+                               activation=activation,
+                               kernel_initializer=kernel_init)(A_prev)
+
+    layer_3 = K.layers.Conv2D(filters=F5, kernel_size=5,
+                              padding='same',
+                              activation=activation,
+                              kernel_initializer=kernel_init)(layer_3R)
+
+    layer_pool = K.layers.MaxPooling2D(pool_size=[3, 3],
+                                       strides=1,
+                                       padding='same')(A_prev)
+
+    layer_poolR = K.layers.Conv2D(filters=FPP, kernel_size=1,
+                                  padding='same',
+                                  activation=activation,
+                                  kernel_initializer=kernel_init)(layer_pool)
+
+    layers_list = [layer_1, layer_2, layer_3, layer_poolR]
+    concatenated = K.layers.concatenate(layers_list)
+    return concatenated
