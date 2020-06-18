@@ -37,13 +37,13 @@ def projection_block(A_prev, filters, s=2):
                              kernel_initializer=kernel_init)(A_prev)
     bathcNorm_l1 = K.layers.BatchNormalization(axis=3)(layer1)
     activation1 = K.layers.Activation('relu')(bathcNorm_l1)
-    
+
     layer2 = K.layers.Conv2D(filters=F3, kernel_size=(3, 3),
                              padding='same',
                              kernel_initializer=kernel_init)(activation1)
     bathcNorm_l2 = K.layers.BatchNormalization(axis=3)(layer2)
     activation2 = K.layers.Activation('relu')(bathcNorm_l2)
- 
+
     layer3 = K.layers.Conv2D(filters=F12, kernel_size=(1, 1),
                              padding='same',
                              kernel_initializer=kernel_init)(activation2)

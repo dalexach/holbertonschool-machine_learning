@@ -33,13 +33,13 @@ def identity_block(A_prev, filters):
                              kernel_initializer=kernel_init)(A_prev)
     batchNorm_l1 = K.layers.BatchNormalization(axis=3)(layer1)
     activation1 = K.layers.Activation('relu')(batchNorm_l1)
- 
+
     layer2 = K.layers.Conv2D(filters=F3, kernel_size=(3, 3), padding='same',
                              kernel_initializer=kernel_init)(activation1)
     batchNorm_l2 = K.layers.BatchNormalization(axis=3)(layer2)
     activation2 = K.layers.Activation('relu')(batchNorm_l2)
- 
-    layer3 = K.layers.Conv2D(filters=F12, kernel_size=(1,1), padding='same',
+
+    layer3 = K.layers.Conv2D(filters=F12, kernel_size=(1, 1), padding='same',
                              kernel_initializer=kernel_init)(activation2)
     batchNorm_l3 = K.layers.BatchNormalization(axis=3)(layer3)
     add = K.layers.Add()([batchNorm_l3, A_prev])
