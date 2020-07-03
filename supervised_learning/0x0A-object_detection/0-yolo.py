@@ -38,15 +38,11 @@ class Yolo():
          - anchors: the anchor boxes
         """
 
-        model = K.models.load_model(model_path)
-        class_names = []
-        with open(classes_path) as f:
-            class_names = f.readlines()
-        for cn in class_names:
-            class_names = cn.strip()
+        self.model = K.models.load_model(model_path)
 
-        self.model = model
-        self.class_names = class_names
+        with open(classes_path, 'r') as f:
+            self.class_names ) [line.strip() for line in f]
+
         self.class_t = class_t
         self.nms_t = nms_t
         self.anchors = anchors
