@@ -91,19 +91,14 @@ class Yolo():
             for each output, respectively
         """
 
-        boxes = []
-        box_confidences = []
-        box_class_probs = []
+        # Create the list with np.ndarray (grid_h, grid_w, anchor_boxes, 4)
+        boxes = [output[..., 0:4] for output in outputs]
 
-        for output in outputs:
-            # Create the list with np.ndarray (grid_h, grid_w, anchor_boxes, 4)
-            boxes.append(output[..., 0:4])
+        # Calculate confidences for each output
+        box_confidences = [self.sigmoidf(output[..., 4, np.newaxis]) for output in outputs]
 
-            # Calculate confidences for each output
-            box_confidences.append(self.sigmoidf(output[..., 4, np.newaxis]))
-
-            # Calculate class probability for each output
-            box_class_probs.append(self.sigmoidf(output[..., 5:]))
+        # Calculate class probability for each output
+        box_class_probs = [self.sigmoidf(output[..., 5:]) for output in outputs]
 
         for i, box in enumerate(boxes):
             grid_height = box.shape[0]
