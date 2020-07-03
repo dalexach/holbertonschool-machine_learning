@@ -203,7 +203,7 @@ class Yolo():
         box_scores = np.delete(box_scores, filtering_mask)
 
         # box_classes
-        box_classes = [box.argmax(axis=-1) for box in scores]   
+        box_classes = [box.argmax(axis=-1) for box in scores]
         box_classes = [box.reshape(-1) for box in box_classes]
         box_classes = np.concatenate(box_classes)
         box_classes = np.delete(box_classes, filtering_mask)
