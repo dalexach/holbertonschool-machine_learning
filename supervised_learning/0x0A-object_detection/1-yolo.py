@@ -100,7 +100,7 @@ class Yolo():
             boxes.append(output[..., 0:4])
 
             # Calculate confidences for each output
-            box_confidences.append(self.sigmoidf(output[..., 4:5]))
+            box_confidences.append(self.sigmoidf(output[..., 4, np.newaxis]))
 
             # Calculate class probability for each output
             box_class_probs.append(self.sigmoidf(output[..., 5:]))
