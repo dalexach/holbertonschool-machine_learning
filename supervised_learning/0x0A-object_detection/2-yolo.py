@@ -48,14 +48,13 @@ class Yolo():
         self.nms_t = nms_t
         self.anchors = anchors
 
-    def sigmoidf(self, x):
+    def sigmoid(self, x):
         """
         Function that calculates sigmoid
         """
-        sigmoid = 1 / (1 + np.exp(-x))
-        return sigmoid
+        return 1 / (1 + np.exp(-x))
 
-    # public method
+    # Public method
     def process_outputs(self, outputs, image_size):
         """
         Public method to process the outputs
@@ -91,26 +90,24 @@ class Yolo():
             for each output, respectively
         """
 
+        img_height = image_size[0]
+        img_width = image_size[1]
+
         boxes = []
         box_confidences = []
         box_class_probs = []
-
         for output in outputs:
-            # Create the list with np.ndarray (grid_h, grid_w, anchor_boxes, 4)
+            # Create the list with np.ndarray
             boxes.append(output[..., 0:4])
-
             # Calculate confidences for each output
-            box_confidences.append(self.sigmoidf(output[..., 4:5]))
-
+            box_confidences.append(self.sigmoid(output[..., 4, np.newaxis]))
             # Calculate class probability for each output
-            box_class_probs.append(self.sigmoidf(output[..., 5:]))
+            box_class_probs.append(self.sigmoid(output[..., 5:]))
 
         for i, box in enumerate(boxes):
-            grid_height = box.shape[0]
-            grid_width = box.shape[1]
-            anchor_box = box.shape[2]
+            grid_height, grid_width, anchor_boxes, _ = box.shape
 
-            c = np.zeros((grid_height, grid_width, anchor_box), dtype=int)
+            c = np.zeros((grid_height, grid_width, anchor_boxes), dtype=int)
 
             # Cy matrix
             idx_y = np.arange(grid_height)
@@ -123,42 +120,49 @@ class Yolo():
             Cx = c + idx_x
 
             # Center coordinates output and normalized
-            tx_n = self.sigmoidf(box[..., 0])
-            ty_n = self.sigmoidf(box[..., 1])
+            tx = (box[..., 0])
+            ty = (box[..., 1])
+            tx_n = self.sigmoid(tx)
+            ty_n = self.sigmoid(ty)
 
             # Calculate bx & by and normalize it
-            bx = tx_n + Cx / grid_width
-            by = ty_n + Cy / grid_height
+            bx = tx_n + Cx
+            by = ty_n + Cy
+            bx /= grid_width
+            by /= grid_height
 
             # Calculate tw & th
-            tw = np.exp(box[..., 2])
-            th = np.exp(box[..., 3])
+            tw = (box[..., 2])
+            th = (box[..., 3])
+            tw_t = np.exp(tw)
+            th_t = np.exp(th)
 
-            # Anchor box dimension
+            # Anchors box dimension
             pw = self.anchors[i, :, 0]
             ph = self.anchors[i, :, 1]
 
+            # Calculate bw & bh and normalize
+            bw = pw * tw_t
+            bh = ph * th_t
             # input size
             input_width = self.model.input.shape[1].value
             input_height = self.model.input.shape[2].value
-
-            # Calculate bw & bh and normalize
-            bw = pw * tw / input_width
-            bh = ph * th / input_height
+            bw /= input_width
+            bh /= input_height
 
             # Corner coordinates
             x1 = bx - bw / 2
-            y1 = bh - bh / 2
+            y1 = by - bh / 2
             x2 = x1 + bw
             y2 = y1 + bh
 
             # Adjust scale
-            box[..., 0] = x1 * image_size[1]
-            box[..., 1] = y1 * image_size[0]
-            box[..., 2] = x2 * image_size[1]
-            box[..., 3] = y2 * image_size[0]
+            box[..., 0] = x1 * img_width
+            box[..., 1] = y1 * img_height
+            box[..., 2] = x2 * img_width
+            box[..., 3] = y2 * img_height
 
-        return (boxes, box_confidences, box_class_probs)
+        return boxes, box_confidences, box_class_probs
 
     # Public method
     def filter_boxes(self, boxes, box_confidences, box_class_probs):
