@@ -341,9 +341,6 @@ class Yolo():
                 * 2 => (image_height, image_width)
         """
 
-        img_dimensions = [img.shape[:2] for img in images]
-        image_shapes = np.stack(img_dimensions, axis=0)
-
         input_h = self.model.input.shape[1].value
         input_w = self.model.input.shape[2].value
 
