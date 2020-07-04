@@ -341,8 +341,8 @@ class Yolo():
                 * 2 => (image_height, image_width)
         """
 
-        input_h = self.model.input.shape[1].value
-        input_w = self.model.input.shape[2].value
+        input_w = self.model.input.shape[1].value
+        input_h = self.model.input.shape[2].value
 
         lpimage = []
         img_shape_list = []
