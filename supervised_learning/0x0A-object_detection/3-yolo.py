@@ -18,7 +18,7 @@ class Yolo():
         Arguments:
          - model_path is the path to where a Darknet Keras model is stored
          - classes_path is the path to where the list of class names used for
-            the Darknet model, listed in order of index, can be found
+            the Darknet model, listed in order of idx, can be found
          - class_t is a float representing the box score threshold for
             the initial filtering step
          - nms_t is a float representing the IOU threshold for
@@ -221,12 +221,12 @@ class Yolo():
         Method to calculate intersection over union
         (x1, y1, x2, y2)
         """
-        xx1 = max(b1[0], b2[0])
-        yy1 = max(b1[1], b2[1])
-        xx2 = max(b1[2], b2[2])
-        yy2 = max(b1[3], b2[3])
+        xi1 = max(b1[0], b2[0])
+        yi1 = max(b1[1], b2[1])
+        xi2 = min(b1[2], b2[2])
+        yi2 = min(b1[3], b2[3])
 
-        intersection = max(yy2 - yy1, 0) * max(xx2 - xx1, 0)
+        intersection = max(yi2 - yi1, 0) * max(xi2 - xi1, 0)
 
         b1_area = (b1[3] - b1[1]) * (b1[2] - b1[0])
         b2_area = (b2[3] - b2[1]) * (b2[2] - b2[0])
@@ -238,7 +238,7 @@ class Yolo():
     # Public method
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """
-        Public method to select the boxes to keep by its score index
+        Public method to select the boxes to keep by its score idx
 
         Arguments:
          - filtered_boxes: a numpy.ndarray of shape (?, 4)
@@ -263,38 +263,35 @@ class Yolo():
             ordered by class and box score, respectively
         """
 
-        box_predictions = []
-        predicted_box_scores = []
-        predicted_box_classes = []
         idx = np.lexsort((-box_scores, box_classes))
 
-        for i in index:
-            box_predictions.append(np.array([filtered_boxes[i]]))
-            predicted_box_classes.append(np.array([box_classes[i]]))
-            predicted_box_scores.append(np.array([box_scores[i]]))
+        box_predictions = np.array([filtered_boxes[i] for i in idx])
+        predicted_box_classes = np.array([box_classes[i] for i in idx])
+        predicted_box_scores = np.array([box_scores[i] for i in idx])
 
-        _, bclass = np.unique(predicted_box_classes, return_counts=True)
+        _, c_class = np.unique(predicted_box_classes, return_counts=True)
 
-        counter, i, j = 0
+        i = 0
+        counter = 0
 
-        for classc in bclass:
-            while i < counter + classc:
+        for class_count in c_class:
+            while i < counter + class_count:
                 j = i + 1
-                while j < counter + classc:
-                    aux = self.iou(box_predictions[i], box_predictions[j])
-
+                while j < counter + class_count:
+                    aux = self.iou(box_predictions[i],
+                                   box_predictions[j])
                     if aux > self.nms_t:
-                        box_predictions = np.delete(box_predictions, j, axis=0)
+                        box_predictions = np.delete(box_predictions, j,
+                                                    axis=0)
+                        predicted_box_scores = np.delete(predicted_box_scores,
+                                                         j, axis=0)
                         predicted_box_classes = (np.delete
                                                  (predicted_box_classes,
                                                   j, axis=0))
-                        predicted_box_scores = np.delete(predicted_box_scores,
-                                                         j, axis=0)
-
-                        classc -= 1
+                        class_count -= 1
                     else:
                         j += 1
                 i += 1
-            counter += classc
+            counter += class_count
 
         return box_predictions, predicted_box_classes, predicted_box_scores
