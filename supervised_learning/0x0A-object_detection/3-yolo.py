@@ -215,6 +215,26 @@ class Yolo():
 
         return (filtered_boxes, box_classes, box_scores)
 
+    @staticmethod
+    def iou(b1, b2):
+        """
+        Method to calculate intersection over union
+        (x1, y1, x2, y2)
+        """
+        xx1 = max(b1[0], b2[0])
+        yy1 = max(b1[1], b2[1])
+        xx2 = max(b1[2], b2[2])
+        yy2 = max(b1[3], b2[3])
+
+        intersection = max(yy2 - yy1, 0) * max(xx2 - xx1, 0)
+
+        b1_area = (b1[3] - b1[1]) * (b1[2] - b1[0])
+        b2_area = (b2[3] - b2[1]) * (b2[2] - b2[0])
+
+        union = b1_area + b2_area - intersection
+
+        return intersection / union
+
     # Public method
     def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """
@@ -244,52 +264,37 @@ class Yolo():
         """
 
         box_predictions = []
-        predicted_box_classes = []
         predicted_box_scores = []
+        predicted_box_classes = []
+        idx = np.lexsort((-box_scores, box_classes))
 
-        for classes in set(box_classes):
-            idx = np.where(box_classes == classes)
+        for i in index:
+            box_predictions.append(np.array([filtered_boxes[i]]))
+            predicted_box_classes.append(np.array([box_classes[i]]))
+            predicted_box_scores.append(np.array([box_scores[i]]))
 
-            filtered = filtered_boxes[idx]
-            scores = box_scores[idx]
-            bclass = box_classes[idx]
+        _, bclass = np.unique(predicted_box_classes, return_counts=True)
 
-            x1 = filtered[:, 0]
-            y1 = filtered[:, 1]
-            x2 = filtered[:, 2]
-            y2 = filtered[:, 3]
+        counter, i, j = 0
 
-            save = []
-            area = (x2 - x1) * (y2 - y1)
-            idx_list = np.flip(scores.argsort(), axis=0)
+        for classc in bclass:
+            while i < counter + classc:
+                j = i + 1
+                while j < counter + classc:
+                    aux = self.iou(box_predictions[i], box_predictions[j])
 
-            while len(idx_list) > 0:
-                p1 = idx_list[0]
-                p2 = idx_list[1:]
-                save.append(p1)
+                    if aux > self.nms_t:
+                        box_predictions = np.delete(box_predictions, j, axis=0)
+                        predicted_box_classes = (np.delete
+                                                 (predicted_box_classes,
+                                                  j, axis=0))
+                        predicted_box_scores = np.delete(predicted_box_scores,
+                                                         j, axis=0)
 
-                xx1 = np.maximum(x1[p1], x1[p2])
-                yy1 = np.maximum(y1[p1], y1[p2])
-                xx2 = np.maximum(x2[p1], x2[p2])
-                yy2 = np.maximum(y2[p1], y2[p2])
-
-                h = np.maximum(0.0, yy2 - yy1)
-                w = np.maximum(0.0, xx2 - xx1)
-
-                intersection = (w * h)
-                union = area[p1] + area[p2] - intersection
-                iou = intersection / union
-                below_threshold = np.where(iou <= self.nms_t)[0]
-                idx_list = idx_list[below_threshold + 1]
-
-            save = np.array(save)
-
-            box_predictions.append(filtered[save])
-            predicted_box_classes.append(bclass[save])
-            predicted_box_scores.append(scores[save])
-
-        box_predictions = np.concatenate(box_predictions)
-        predicted_box_scores = np.concatenate(predicted_box_scores)
-        predicted_box_classes = np.concatenate(predicted_box_classes)
+                        classc -= 1
+                    else:
+                        j += 1
+                i += 1
+            counter += classc
 
         return box_predictions, predicted_box_classes, predicted_box_scores
