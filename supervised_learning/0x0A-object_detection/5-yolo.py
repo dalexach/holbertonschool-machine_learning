@@ -139,7 +139,7 @@ class Yolo():
             tw_t = np.exp(tw)
             th_t = np.exp(th)
 
-            # Anchors box dimension
+            # Anchors box dimeensionension
             pw = self.anchors[i, :, 0]
             ph = self.anchors[i, :, 1]
 
@@ -344,21 +344,24 @@ class Yolo():
         input_w = self.model.input.shape[1].value
         input_h = self.model.input.shape[2].value
 
-        lpimage = []
-        img_shape_list = []
+        lpimages = []
+        limage_shapes = []
 
         for img in images:
+            # save original image size
             img_shape = img.shape[0], img.shape[1]
-            img_shape_list.append(img_shape)
+            limage_shapes.append(img_shape)
 
+            # Resize the images with inter-cubic interpolation
             dimension = (input_w, input_h)
             resized = cv2.resize(img, dimension,
-                                 inrerpolation=cv2.INTER_CUBIC)
+                                 interpolation=cv2.INTER_CUBIC)
 
+            # Rescale all images to have pixel values in the range [0, 1]
             pimage = resized / 255
-            lpimage.append(pimage)
+            lpimages.append(pimage)
 
-        pimages = np.array(lpimage)
-        image_shapes = np.array(img_shape_list)
+        pimages = np.array(lpimages)
+        image_shapes = np.array(limage_shapes)
 
         return pimages, image_shapes
