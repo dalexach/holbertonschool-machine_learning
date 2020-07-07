@@ -5,6 +5,7 @@ Yolo class
 
 import cv2
 import glob
+import os
 import tensorflow.keras as K
 import numpy as np
 
@@ -365,3 +366,45 @@ class Yolo():
         image_shapes = np.array(limage_shapes)
 
         return pimages, image_shapes
+
+    # Public method
+    def show_boxes(self, image, boxes, box_classes, box_scores, file_name):
+        """
+        Public method that displays a image with all boundary boxes,
+        class names and box scores.
+
+        Arguments:
+         - image: a numpy.ndarray containing an unprocessed image
+         - boxes: a numpy.ndarray containing the boundary boxes for the image
+         - box_classes: a numpy.ndarray containing the class indices
+            for each box
+         - box_scores: a numpy.ndarray containing the box scores for each box
+         - file_name: the file path where the original image is stored
+            If the s key is pressed:
+                The image should be saved in the directory detections,
+                located in the current directory
+            If any key besides s is pressed, the image window should be
+            closed without saving
+        """
+
+        box_scores_r = np.around(box_scores, decimals=2)
+        for i, box in enumerate(boxes):
+            x, y, w, h = box
+            txt_class = self.class_names[box_classes[i]]
+            txt_score = str(box_scores_r[i])
+            start_r = (int(x), int(h))
+            start_text = (int(x) + 1, int(y) - 5)
+            end_r = (int(w), int(y))
+
+            cv2.rectangle(image, start_r, end_r, (255, 0, 0), 2)
+            title = txt_class + ' ' + txt_score
+            cv2.putText(image, title, start_text, cv2.FONT_HERSHEY_SIMPLEX,
+                        0.5, (0, 0, 255), 1, cv2.LINE_AA)
+
+        cv2.imshow(file_name, image)
+        key = cv2.waitKey(0)
+        if key == ord('s'):
+            if not os.path.exists('./detections'):
+                os.makedirs('./detections')
+            cv2.imwrite('./detections/' + file_name, image)
+        cv2.destroyAllWindows()
