@@ -313,7 +313,7 @@ class Yolo():
              * image_paths: a list of paths to the individual images in images
         """
 
-        path = folder_path + '/*.jpg'
+        path = folder_path + '/*'
         image_paths = glob.glob(path, recursive=False)
 
         images = [cv2.imread(image) for image in image_paths]
