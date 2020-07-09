@@ -313,7 +313,7 @@ class Yolo():
              * image_paths: a list of paths to the individual images in images
         """
 
-        path = folder_path + '/*.jpg'
+        path = folder_path + '/*'
         image_paths = glob.glob(path, recursive=False)
 
         images = [cv2.imread(image) for image in image_paths]
@@ -352,12 +352,12 @@ class Yolo():
             img_shape = img.shape[0], img.shape[1]
             limage_shapes.append(img_shape)
 
-            # Resize the images with inter-cubic interpolation
+            # Resize the images (inter-cubic interpolation)
             dimension = (input_w, input_h)
             resized = cv2.resize(img, dimension,
                                  interpolation=cv2.INTER_CUBIC)
 
-            # Rescale all images to have pixel values in the range [0, 1]
+            # Rescale all images (pixel values in the range [0, 1])
             pimage = resized / 255
             lpimages.append(pimage)
 
