@@ -13,7 +13,7 @@ How to create a Face Verification system
 | [utils.py](utils.py) | Functions for load images, load csv, save images, generate triplets. |
 | [align.py](align.py) | Class Face Align. |
 | [triplet_loss.py](triplet_loss.py) | Custom layer class TripletLoss. |
-| [train_model.py](train_model.py) | Class TrainModel. |
+| [train_model.py](train_model.py) | Class TrainModel. || [verification.py](verification.py) | Class FaceVerification. |
 
 
 ## Build with
