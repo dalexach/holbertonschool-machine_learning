@@ -24,6 +24,7 @@ def adjugate(matrix):
 
     return adj
 
+
 def cofactor(matrix):
     """
     Function that calculates the cofactor matrix of a matrix:
@@ -40,7 +41,7 @@ def cofactor(matrix):
             cof[r][c] *= ((-1) ** (r + c))
 
     return cof
-    
+
 
 def submatrix(matrix, row, i):
     """
