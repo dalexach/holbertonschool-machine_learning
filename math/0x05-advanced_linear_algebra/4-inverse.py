@@ -23,11 +23,11 @@ def inverse(matrix):
             raise TypeError("matrix must be a list of lists")
 
     if len(matrix) == 1 and len(matrix[0]) == 0:
-        raise ValueError('matrix must be a square matrix')
+        raise ValueError('matrix must be a non-empty square matrix')
 
     for n in matrix:
         if len(n) != len(matrix):
-            raise ValueError('matrix must be a square matrix')
+            raise ValueError('matrix must be a non-empty square matrix')
 
     det = determinant(matrix)
     if det == 0:
