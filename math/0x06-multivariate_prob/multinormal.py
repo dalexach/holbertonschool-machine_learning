@@ -57,20 +57,20 @@ class MultiNormal(object):
 
         d = self.cov.shape[0]
         if len(x.shape) != 2:
-            raise ValueError('x must have the shape ({d}, 1)'.format(d))
+            raise ValueError('x must have the shape ({}, 1)'.format(d))
 
         if x.shape[1] != 1 or x.shape[0] != d:
-            raise ValueError('x must have the shape ({d}, 1)'.format(d))
+            raise ValueError('x must have the shape ({}, 1)'.format(d))
 
         n = x.shape[0]
 
         m = self.mean
         c = self.cov
 
-        den = np.sqrt((2 * np.pi)**n) * np.linalg.det(c)
+        den = np.sqrt(((2 * np.pi) ** n) * np.linalg.det(c))
         icov = np.linalg.inv(c)
-        exp = (-0.5 * np.matmul(np.matmul((x - m).T, icov), x - self.mean))
+        expo = (-0.5 * np.matmul(np.matmul((x - m).T, icov), x - self.mean))
 
-        pdf = (1 / den) * np.exp(exp[0][0])
+        pdf = (1 / den) * np.exp(expo[0][0])
 
         return pdf
