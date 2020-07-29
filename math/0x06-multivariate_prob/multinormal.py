@@ -2,6 +2,7 @@
 """
 Class MultiNormal
 """
+import numpy as np
 
 
 class MultiNormal(object):
