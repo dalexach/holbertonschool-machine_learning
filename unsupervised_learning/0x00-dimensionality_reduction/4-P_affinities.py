@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+P affinities
 """
 import numpy as np
 P_init = __import__('2-P_init').P_init
