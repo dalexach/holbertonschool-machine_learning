@@ -32,7 +32,7 @@ def P_init(X, perplexity):
     n, d = X.shape
 
     EX = np.sum(np.square(x), axis=1)
-    D = np.add(np.add(-2 * np.dot(X, X.T), EX).T, EX)
+    D = (np.add(np.add(-2 * np.dot(X, X.T), EX).T, EX))
     P = np.zeros([n, n], dtype='float64')
     betas = np.ones([n, 1], dtype='float64')
     H = np.log2(perplexity)
