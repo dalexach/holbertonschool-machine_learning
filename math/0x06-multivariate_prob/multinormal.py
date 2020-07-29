@@ -37,3 +37,40 @@ class MultiNormal(object):
 
         X = data - self.mean
         self.cov = (np.dot(X, X.T)) / (n - 1)
+
+    # Public instance method
+    def pdf(self, x):
+        """
+        Public instance method def pdf that calculates the PDF at a data point
+
+        Arguments:
+         - x is a numpy.ndarray of shape (d, 1) containing the data point
+            whose PDF should be calculated
+            * d is the number of dimensions of the Multinomial instance
+
+        Returns
+         The value of the PDF
+        """
+
+        if type(x) != np.ndarray:
+            raise TypeError('x must be a numpy.ndarray')
+
+        d = self.cov.shape[0]
+        if len(x.shape) != 2:
+            raise ValueError('x must have the shape ({d}, 1)')
+
+        if x.shape[1] != 1 or x.shape[0] != d:
+            raise ValueError('x must have the shape ({d}, 1)')
+
+        n = x.shape[0]
+
+        m = self.mean
+        c = self.cov
+
+        den = np.sqrt((2 * np.pi)**n) * np.linalg.det(c)
+        icov = np.linalg.inv(c)
+        exp = (-0.5 * np.matmul(np.matmul((x - m).T, icov), x - self.mean))
+
+        pdf = (1 / den) * np.exp(exp[0][0])
+
+        return pdf
