@@ -14,7 +14,8 @@ from scipy import math, special
 def posterior(x, n, p1, p2):
     """
     Function that calculates the posterior probability that the probability
-    of developing severe side effects falls within a specific range given the data
+    of developing severe side effects falls within a specific range
+    given the data
 
     Arguments:
      - x is the number of patients that develop severe side effects
@@ -38,16 +39,16 @@ def posterior(x, n, p1, p2):
         raise ValueError('x cannot be greater than n')
 
     if not isinstance(p1, float):
-        raise ValueError('{} must be a float in the range [0, 1]'.format(p1))
+        raise ValueError('p1 must be a float in the range [0, 1]')
 
     if not isinstance(p2, float):
-        raise ValueError('{} must be a float in the range [0, 1]'.format(p2))
+        raise ValueError('p2 must be a float in the range [0, 1]')
 
     if p1 > 1 or p1 < 0:
-        raise ValueError('{} must be a float in the range [0, 1]'.format(p1))
+        raise ValueError('p1 must be a float in the range [0, 1]')
 
     if p2 > 1 or p2 < 0:
-        raise ValueError('{} must be a float in the range [0, 1]'.format(p2))
+        raise ValueError('p2 must be a float in the range [0, 1]')
 
     if p2 <= p1:
         raise ValueError('p2 must be greater than p1')
