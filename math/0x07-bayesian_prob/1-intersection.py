@@ -17,7 +17,6 @@ def intersection(x, n, P, Pr):
     the various hypothetical probabilities
 
     Arguments:
-     Arguments:
      - x is the number of patients that develop severe side effects
      - n is the total number of patients observed
      - P is a 1D numpy.ndarray containing the various hypothetical

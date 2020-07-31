@@ -16,7 +16,6 @@ def marginal(x, n, P, Pr):
     Function that calculates the marginal probability of obtaining the data
 
     Arguments:
-     Arguments:
      - x is the number of patients that develop severe side effects
      - n is the total number of patients observed
      - P is a 1D numpy.ndarray containing the various hypothetical
