@@ -21,6 +21,7 @@ def marginal(x, n, P, Pr):
      - n is the total number of patients observed
      - P is a 1D numpy.ndarray containing the various hypothetical
         probabilities of developing severe side effects
+     - Pr is a 1D numpy.ndarray containing the prior beliefs of P
 
     Returns:
      A 1D numpy.ndarray containing the likelihood of obtaining
