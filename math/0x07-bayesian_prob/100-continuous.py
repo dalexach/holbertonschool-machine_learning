@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+"""
+Continuous Posterior
+
+You are conducting a study on a revolutionary cancer drug and are looking
+to find the probability that a patient who takes this drug will develop severe
+side effects. During your trials, n patients take the drug and x patients
+develop severe side effects. You can assume that x follows
+a binomial distribution.
+"""
+from scipy import math, special
+
+
+def posterior(x, n, p1, p2):
+    """
+    Function that calculates the posterior probability that the probability
+    of developing severe side effects falls within a specific range given the data
+
+    Arguments:
+     - x is the number of patients that develop severe side effects
+     - n is the total number of patients observed
+     - p1 is the lower bound on the range
+     - p2 is the upper bound on the range
+
+    Returns:
+     The posterior probability of each probability
+     in P given x and n, respectively
+    """
+
+    if not isinstance(n, int) or (n <= 0):
+        raise ValueError('n must be a positive integer')
+
+    if not isinstance(x, int) or (x < 0):
+        err = 'x must be an integer that is greater than or equal to 0'
+        raise ValueError(err)
+
+    if x > n:
+        raise ValueError('x cannot be greater than n')
+
+    if not isinstance(p1, float):
+        raise ValueError('{} must be a float in the range [0, 1]'.format(p1))
+
+    if not isinstance(p2, float):
+        raise ValueError('{} must be a float in the range [0, 1]'.format(p2))
+
+    if p1 > 1 or p1 < 0:
+        raise ValueError('{} must be a float in the range [0, 1]'.format(p1))
+
+    if p2 > 1 or p2 < 0:
+        raise ValueError('{} must be a float in the range [0, 1]'.format(p2))
+
+    if p2 <= p1:
+        raise ValueError('p2 must be greater than p1')
+
+    return 1
