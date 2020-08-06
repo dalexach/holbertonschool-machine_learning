@@ -28,7 +28,7 @@ def kmeans(X, k, iterations=1000):
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None, None
 
-    if type(k) != int or k <= 0 or k >= X.shape[0]:
+    if type(k) != int or k <= 0:# or k >= X.shape[0]:
         return None, None
 
     if type(iterations) != int or iterations <= 0:
@@ -36,25 +36,54 @@ def kmeans(X, k, iterations=1000):
 
     n, d = X.shape
 
-    minimum = X.min(axis=0)
-    maximum = X.max(axis=0)
+    minimum = np.amin(X, axis=0)
+    maximum = np.amax(X, axis=0)
 
-    C = np.random.uniform(minimum, maximum, (k, d))
-
+    # C = np.random.uniform(minimum, maximum, (k, d))
+    C = initialize(X, k)
+    clss = None
     for i in range(iterations):
         C_cpy = np.copy(C)
-        distances = np.linalg.norm(X[:, None] - C, axis=-1)
-        clss = np.argmin(distances, axis=-1)
+        distance = np.linalg.norm(X[:, None] - C, axis=-1)
+        clss = np.argmin(distance, axis=-1)
         # move the centroids
         for j in range(k):
             index = np.argwhere(clss == j)
             if not len(index):
-                C[j] = np.random.uniform(minimum, maximum, (1, d))
+                C[j] = initialize(X, 1)
             else:
                 C[j] = np.mean(X[index], axis=0)
 
         if (C_cpy == C).all():
-            return (C, clss)
-    distances = np.linalg.norm(X[:, None] - C, axis=-1)
-    clss = np.argmin(distances, axis=-1)
-    return (C, clss)
+            return C, clss
+
+    distance = np.linalg.norm(X[:, None] - C, axis=-1)
+    clss = np.argmin(distance, axis=-1)
+
+    return C, clss
+
+
+def initialize(X, k):
+    """
+    Function that initializes cluster centroids for K-means
+
+    Arguments:
+     - X is a numpy.ndarray of shape (n, d) containing the dataset
+         that will be used for K-means clustering
+        * n is the number of data points
+        * d is the number of dimensions for each data point
+     - k is a positive integer containing the number of clusters
+
+    Returns:
+     A numpy.ndarray of shape (k, d) containing the initialized centroids
+     for each cluster, or None on failure
+    """
+
+    n, d = X.shape
+
+    minimum = np.amin(X, axis=0)
+    maximum = np.amax(X, axis=0)
+
+    values = np.random.uniform(minimum, maximum, (k, d))
+
+    return values
