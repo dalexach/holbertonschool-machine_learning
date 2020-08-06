@@ -50,7 +50,6 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     pi, m, S = initialize(X, k)
     prev_like = 0
     g, likelihood = expectation(X, pi, m, S)
-    
 
     for i in range(iterations):
         if verbose and (i % 10 == 0):
@@ -59,7 +58,7 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
             print(msg)
         pi, m, S = maximization(X, g)
         g, likelihood = expectation(X, pi, m, S)
-        
+
         if abs(likelihood - prev_like) <= tol:
             break
         prev_like = likelihood
