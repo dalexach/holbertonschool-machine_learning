@@ -2,7 +2,7 @@
 """
 GMM function
 """
-import numpy as np
+import sklearn.mixture
 
 
 def gmm(X, k):
@@ -24,3 +24,13 @@ def gmm(X, k):
         - bic is a numpy.ndarray of shape (kmax - kmin + 1) containing the BIC
             value for each cluster size tested
     """
+
+    mixture = sklearn.mixture.GaussianMixture(n_components=k)
+    g = mixture.fit(X)
+    m = g.means_
+    S = g.covariances_
+    pi = g.weights_
+    clss = mixture.predict(X)
+    bic = mixture.bic(X)
+
+    return pi, m, S, clss, bic
