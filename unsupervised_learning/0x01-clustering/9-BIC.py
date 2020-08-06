@@ -71,7 +71,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         p = (k * d * (d + 1) / 2) + (d * k) + k - 1
         bic = p * np.log(n) - 2 * like
         b.append(bic)
-    b = np.ayarray(b)
+    b = np.array(b)
     best = np.argmin(b)
     l_b = np.array(l_b)
 
