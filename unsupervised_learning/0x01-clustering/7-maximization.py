@@ -36,7 +36,7 @@ def maximization(X, g):
     k = g.shape[0]
     prb = np.sum(g, axis=0)
     tot_prb = np.ones((n, ))
-    if not np.isclose(prb,tot_prb).all():
+    if not np.isclose(prb, tot_prb).all():
         return None, None, None
 
     pi = np.zeros((k, ))
