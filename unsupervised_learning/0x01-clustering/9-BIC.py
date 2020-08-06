@@ -60,19 +60,19 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         return None, None, None, None
 
     n, d = X.shape
-    k_r, result, l, b = [], [], [], []
+    k_r, result, l_b, b = [], [], [], []
 
     for k in range(kmin, kmax + 1):
         pi, m, S, g, like = expectation_maximization(
             X, k, iterations, tol, verbose)
         k_r.append(k)
         result.append((pi, m, S))
-        l.append(like)
-        p = (k * d *(d + 1) / 2) + (d * k) + k - 1
+        l_b.append(like)
+        p = (k * d * (d + 1) / 2) + (d * k) + k - 1
         bic = p * np.log(n) - 2 * like
         b.append(bic)
     b = np.asayarray(b)
     best = np.argmin(b)
-    l = np.asarray(l)
+    l_b = np.asarray(l_b)
 
-    return k_r[best], result[best], l[best], b[best]
+    return k_r[best], result[best], l_b[best], b[best]
