@@ -3,7 +3,7 @@
 BIC function
 """
 import numpy as np
-expectation_maximization = __import__('7-EM').expectation_maximization
+expectation_maximization = __import__('8-EM').expectation_maximization
 
 
 def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
@@ -43,3 +43,36 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
             * n is the number of data points used to create the model
             * l is the log likelihood of the model
     """
+
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+        return None, None, None, None
+    if type(kmin) != int or kmin <= 0 or kmin >= X.shape[0]:
+        return None, None, None, None
+    if type(kmax) != int or kmax <= 0 or kmax >= X.shape[0]:
+        return None, None, None, None
+    if kmin >= kmax:
+        return None, None, None, None
+    if type(iterations) != int or iterations <= 0:
+        return None, None, None, None
+    if type(tol) != float or tol <= 0:
+        return None, None, None, None
+    if type(verbose) != bool:
+        return None, None, None, None
+
+    n, d = X.shape
+    k_r, result, l, b = [], [], [], []
+
+    for k in range(kmin, kmax + 1):
+        pi, m, S, g, like = expectation_maximization(
+            X, k, iterations, tol, verbose)
+        k_r.append(k)
+        result.append((pi, m, S))
+        l.append(like)
+        p = (k * d *(d + 1) / 2) + (d * k) + k - 1
+        bic = p * np.log(n) - 2 * like
+        b.append(bic)
+    b = np.asayarray(b)
+    best = np.argmin(b)
+    l = np.asarray(l)
+
+    return k_r[best], result[best], l[best], b[best]
