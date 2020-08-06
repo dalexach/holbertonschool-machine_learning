@@ -24,3 +24,34 @@ def kmeans(X, k, iterations=1000):
          - clss is a numpy.ndarray of shape (n,) containing the index of the
             cluster in C that each data point belongs to
     """
+
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+        return None
+
+    if not isinstance(k, int) or k <= 0 or k >= X.shape[0]:
+        return None
+
+    n, d = X.shape
+
+    minimum = X.min(axis=0)
+    maximum = X.max(axis=0)
+
+    C = np.random.uniform(minimum, maximum, (k, d))
+
+    for i in range(iterations):
+        C_cpy = np.copy(C)
+        distances = np.linalg.norm(X[:, None] - C, axis=-1)
+        clss = np.argmin(distances, axis=-1)
+        # move the centroids
+        for j in range(k):
+            index = np.argwhere(clss == j)
+            if not len(index):
+                C[j] = np.random.uniform(minimum, maximum, (1, d))
+            else:
+                C[j] = np.mean(X[index], axis=0)
+
+        if (C_cpy == C).all():
+            return (C, clss)
+    distances = np.linalg.norm(X[:, None] - C, axis=-1)
+    clss = np.argmin(distances, axis=-1)
+    return (C, clss)
