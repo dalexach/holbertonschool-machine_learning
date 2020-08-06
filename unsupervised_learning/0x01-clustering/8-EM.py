@@ -35,3 +35,40 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
         each data point in each cluster
      - l is the log likelihood of the model
     """
+
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+        return None, None, None, None, None
+    if type(k) != int or k <= 0 or k >= X.shape[0]:
+        return None, None, None, None, None
+    if type(iterations) != int or iterations <= 0:
+        return None, None, None, None, None
+    if type(tol) != float or tol <= 0:
+        return None, None, None, None, None
+    if type(verbose) != bool:
+        return None, None, None, None, None
+
+    pi, m, S = initialize(X, k)
+    prev_like = 0
+
+    for i in range(iterations):
+        g, likelihood = expectation(X, pi, m, S)
+        pi, m, S = maximization(X, g)
+
+        if verbose:
+            msg = 'Log Likelihood after {} iterations: {}'\
+                .format(i, likelihood.round(5))
+            if i % 10 == 0 or i == 0:
+                print(msg)
+            if i == iterations - 1:
+                print(msg)
+            if abs(likelihood - prev_like) <= tol:
+                print(msg)
+                break
+            if i == (iterations + 1):
+                print(msg)
+                break
+        if abs(likelihood - prev_like) <= tol:
+            break
+        prev_like = likelihood
+
+    return pi, m, S, g, likelihood
