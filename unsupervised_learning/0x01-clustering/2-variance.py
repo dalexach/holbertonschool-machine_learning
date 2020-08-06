@@ -18,3 +18,20 @@ def variance(X, C):
      var, or None on failure
          - var is the total variance
     """
+
+    if not isinstance(X, np.ndarray) or len(X.shape) != 2:
+        return None
+
+    if not isinstance(C, np.ndarray) or len(X.shape) != 2:
+        return None
+
+    try:
+        n, d = X.shape
+        distance = np.sqrt(((X - C[:, np.newaxis])**2).sum(axis=-1))
+        min_distance = np.min(distance, axis=0)
+        v = np.sum(min_distance ** 2)
+
+        return v
+
+    except Exception:
+        return None
