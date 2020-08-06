@@ -16,4 +16,4 @@ if __name__ == "__main__":
 
     for k in range(1, 11):
         C, _ = kmeans(X, k)
-        print('Variance with {} clusters: {}'.format(k, variance(X, C).round(5)))
+        print('Variance with {} clusters: {}'.format(k, variance(X, C)))

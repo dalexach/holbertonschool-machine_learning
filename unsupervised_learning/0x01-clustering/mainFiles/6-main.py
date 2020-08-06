@@ -16,4 +16,4 @@ if __name__ == '__main__':
     g, l = expectation(X, pi, m, S)
     print(g)
     print(np.sum(g, axis=0))
-        print(l)
+    print(l)
