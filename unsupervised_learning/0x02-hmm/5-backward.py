@@ -62,7 +62,7 @@ def backward(Observation, Emission, Transition, Initial):
 
     B = np.zeros((N, T))
     B[:, T - 1] += 1
-    
+
     for t in range(T - 2, -1, -1):
         B[:, t] = (B[:, t + 1] * Transition[:, :]
                    ).dot(Emission[:, Observation[t + 1]])
