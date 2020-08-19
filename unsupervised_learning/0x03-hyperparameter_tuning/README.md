@@ -3,6 +3,22 @@
 ## 0x03. Hyperparameter Tuning
 ### Description 
 
+Learning Objectives
+
+- What is Hyperparameter Tuning?
+- What is random search? grid search?
+- What is a Gaussian Process?
+- What is a mean function?
+- What is a Kernel function?
+- What is Gaussian Process Regression/Kriging?
+- What is Bayesian Optimization?
+- What is an Acquisition function?
+- What is Expected Improvement?
+- What is Knowledge Gradient?
+- What is Entropy Search/Predictive Entropy Search?
+- What is GPy?
+- What is GPyOpt?
+
 
 ### Files
 #### Mandatory Tasks
@@ -15,12 +31,6 @@
 | [3-bayes_opt.py](3-bayes_opt.py) | Class BayesianOptimization that performs Bayesian optimization on a noiseless 1D Gaussian process, creating the costructor of the class. |
 | [4-bayes_opt.py](4-bayes_opt.py) | Update the class BayesianOptimization, adding the public instance method acquisition. |
 | [5-bayes_opt.py](5-bayes_opt.py) | Update the class BayesianOptimization, adding the public instance method optimize. |
-
-
-#### Advanced Tasks
-| File | Description |
-| ------ | ------ |
-| []() | . |
 
 
 ### Build with
