@@ -28,7 +28,10 @@ def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
      The converged Transition, Emission, or None, None on failure
     """
 
-    if not isinstance(Observations, np.ndarray) or len(Observations.shape) != 1:
+    if not isinstance(Observations, np.ndarray):
+        return None, None
+
+    if len(Observations.shape) != 1:
         return None, None
 
     T = Observations.shape[0]
