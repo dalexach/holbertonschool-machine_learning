@@ -28,7 +28,8 @@ def sparse(input_dims, hidden_layers, latent_dims, lambtha):
     # Encoder
     iencoder = keras.Input(shape=(input_dims, ))
 
-    output = keras.layers.Dense(hidden_layers[0], activation='relu', )(iencoder)
+    output = keras.layers.Dense(hidden_layers[0],
+                                activation='relu', )(iencoder)
 
     for i in range(1, len(hidden_layers)):
         output = keras.layers.Dense(hidden_layers[i],
