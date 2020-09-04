@@ -14,6 +14,7 @@ def sigmoid(x):
 
     return sigmoid
 
+
 class GRUCell():
     """
     Class GRUCell that represents a gated recurrent unit
@@ -58,7 +59,6 @@ class GRUCell():
         e_x = np.exp(x - x_max)
 
         return e_x / np.sum(e_x, axis=1, keepdims=True)
-
 
     # public instance method
     def forward(self, h_prev, x_t):
