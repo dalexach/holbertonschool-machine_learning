@@ -2,7 +2,7 @@
 """
 Preprocessing the database
 """
-import pandas as pd
+# import pandas as pd
 
 
 def preprocessing(name_file):
