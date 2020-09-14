@@ -27,6 +27,12 @@ In this project we can answer this questions:
 | [5-elmo](5-elmo) | The letter answer, followed by a newline, that lists the correct statements. |
 
 
+### Directories
+| Directory | Description |
+| --------- | ----------- |
+| [mainFiles](mainFiles) | This directory contains all the main files to test the functions. |
+
+
 ### Build with
 - Python (python 3.5)
 - Numpy (numpy 1.15)
