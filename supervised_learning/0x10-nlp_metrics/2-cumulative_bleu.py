@@ -38,7 +38,8 @@ def cumulative_bleu(references, sentence, n):
                     clipped[w] = 1
 
     clipped_count = sum(clipped.values())
-    closest_len_refer = min(len_refer, key=lambda x: abs(x - len_Noutput))
+    closest_idx = np.argmin([abs(len(x) - len_Noutput) for x in references])
+    closest_len_refer = len(references[closest_idx])
 
     if len_Noutput > closest_len_refer:
         bp = 1
