@@ -32,9 +32,8 @@ def uni_bleu(references, sentence):
                     clipped[w] = 1
 
     clipped_count = sum(clipped.values())
-    #closest_len_refer = min(len_refer, key=lambda x: abs(x - len_output))
-    closest_idx_refer = np.argmin([abs(len(x) - len_output) for x in references])
-    closest_len_refer = len(references[closest_idx_refer])
+    closest_idx = np.argmin([abs(len(x) - len_output) for x in references])
+    closest_len_refer = len(references[closest_idx])
 
     if len_output > closest_len_refer:
         bp = 1
