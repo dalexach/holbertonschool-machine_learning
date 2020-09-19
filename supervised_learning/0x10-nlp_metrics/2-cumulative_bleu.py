@@ -7,7 +7,8 @@ import numpy as np
 
 def precitions(references, sentence, n):
     """
-    Function to calculate the presition for the n-gram BLEU score for a sentence
+    Function to calculate the presition
+    for the n-gram BLEU score for a sentence
 
     Arguments:
      - references is a list of reference translations
@@ -40,7 +41,7 @@ def precitions(references, sentence, n):
     clipped_count = sum(clipped.values())
 
     return clipped_count / len(sentence)
-    
+
 
 def cumulative_bleu(references, sentence, n):
     """
