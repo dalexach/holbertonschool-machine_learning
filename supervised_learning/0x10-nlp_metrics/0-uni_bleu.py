@@ -19,26 +19,29 @@ def uni_bleu(references, sentence):
     """
 
     len_output = len(sentence)
-    counter = 0
-    len_clipped = 0
+    len_refer = []
+    clipped = {}
 
-    for w in sentence:
-        counter += sentence.count(w)
-        maxi = 0
-        for ref in references:
-            tmp = ref.count(w)
-            if tmp > maxi:
-                maxi = tmp
-        len_clipped += maxi
+    # References and sentences
+    for ref in references:
+        len_refer.append(len(ref))
 
-    closest_idx = np.argmin([abs(len(x) - len_output) for x in references])
-    closest_len_refer = len(references[closest_idx])
+        for w in ref:
+            if w in sentence:
+                if not clipped.keys() == w:
+                    clipped[w] = 1
+
+    clipped_count = sum(clipped.values())
+    #closest_len_refer = min(len_refer, key=lambda x: abs(x - len_output))
+    closest_idx_refer = np.argmin([abs(len(x) - len_output) for x in references])
+    closest_len_refer = len(references[closest_idx_refer])
 
     if len_output > closest_len_refer:
         bp = 1
     else:
-        bp = np.exp(1 - closest_len_refer / len_output)
+        bp = np.exp(1 - float(closest_len_refer) / float(len_output))
 
-    BLEU_score = bp * (len_clipped / counter)
+    # BLEU_score = bp * (clipped_count / len_output)
+    BLEU_score = bp * np.exp(np.log(clipped_count / len_output))
 
     return BLEU_score
