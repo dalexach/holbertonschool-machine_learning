@@ -39,7 +39,7 @@ def precitions(references, sentence, n):
 
     clipped_count = sum(clipped.values())
 
-    return clipped_count / len_Noutput
+    return clipped_count / len(sentence)
     
 
 def cumulative_bleu(references, sentence, n):
