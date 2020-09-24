@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-
+Self Attention Class
 """
 import tensorflow as tf
 
