@@ -30,14 +30,13 @@ def sdp_attention(Q, K, V, mask=None):
     """
 
     qk_dot = tf.matmul(Q, K, transpose_b=True)
-    dk_square = tf.cast((tf.math.square(K.shape[-1])), tf.float32)
-    qk_scale = tf.math.divide(qk_dot, dk_square)
+    dk = tf.cast(tf.shape(K)[-1], tf.float32)
+    qk_scaled = qk_dot / tf.math.sqrt(dk)
 
     if mask is not None:
-        mask_multiply = tf.math.multiply(mask, -1e9)
-        qk_scale += mask_multiply
+        qk_scaled += (mask * -1e9)
 
-    weights = tf.nn.softmax(qk_scale, axis=-1)
+    weights = tf.nn.softmax(qk_scaled, axis=-1)
     output = tf.matmul(weights, V)
 
     return output, weights
