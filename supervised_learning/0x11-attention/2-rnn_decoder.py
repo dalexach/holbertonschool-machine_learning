@@ -68,9 +68,8 @@ class RNNDecoder(tf.keras.layers.Layer):
         x = self.embedding(x)
         attention = SelfAttention(s_prev.shape[1])
         context, weights = attention(s_prev, hidden_states)
-        con = tf.expand_dims(context, axis=1)
-        inputs = tf.concat([con, x], axis=-1)
-        decode_outs, state = self.gru(inputs)
+        x = tf.expand_dims([tf.expand_dims(context, 1), x], axis=-1)
+        decode_outs, state = self.gru(x)
 
         y = tf.reshape((decode_outs), (-1, decode_outs.shape[2]))
         y = self.F(y)
