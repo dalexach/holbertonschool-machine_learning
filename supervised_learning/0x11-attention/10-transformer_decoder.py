@@ -66,11 +66,12 @@ class Decoder(tf.keras.layers.Layer):
          containing the decoder output
         """
 
-        seq_len = x.shape[1]
+        seq_len = tf.shape(x)[1]
+        positional_encoding = tf.cast(self.positional_encoding, dtype=tf.float32)
 
         x = self.embedding(x)
         x *= tf.math.sqrt(tf.cast(self.dm, tf.float32))
-        x += self.positional_encoding[:seq_len]
+        x += positional_encoding[:seq_len]
 
         our = self.dropout(x, training=training)
 
