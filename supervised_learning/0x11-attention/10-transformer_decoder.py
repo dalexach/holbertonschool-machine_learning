@@ -38,12 +38,13 @@ class Decoder(tf.keras.layers.Layer):
         """
 
         super(Decoder, self).__init__()
+
         self.N = N
         self.dm = dm
         self.embedding = tf.keras.layers.Embedding(target_vocab, dm)
         self.positional_encoding = positional_encoding(max_seq_len, dm)
         self.blocks = [DecoderBlock(dm, h, hidden, drop_rate)
-                       for n in range(N)]
+                       for _ in range(N)]
         self.dropout = tf.keras.layers.Dropout(drop_rate)
 
     def call(self, x, encoder_output, training, look_ahead_mask, padding_mask):
@@ -72,9 +73,10 @@ class Decoder(tf.keras.layers.Layer):
         x *= tf.math.sqrt(tf.cast(self.dm, tf.float32))
         x += self.positional_encoding[:seq_len]
 
-        our = self.dropout(x, training=training)
+        x = self.dropout(x, training=training)
 
         for n in range(self.N):
-            out = self.blocks[n](out, encoder_output, training,
-                                 look_ahead_mask, padding_mask)
-        return out
+            x = self.blocks[n](x, encoder_output, training,
+                               look_ahead_mask, padding_mask)
+
+        return x
