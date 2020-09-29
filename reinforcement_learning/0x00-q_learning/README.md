@@ -26,6 +26,11 @@
 | [3-q_learning.py](3-q_learning.py) | Function train that performs Q-learning. |
 | [4-play.py](4-play.py) | Function play that has the trained agent play an episode. |
 
+### Directories
+| Directory | Description |
+| --------- | ------ |
+| [mainFiles](mainFiles) | Contains the main files to test the functions |
+
 
 ### Build with
 - Python (python 3.5)
