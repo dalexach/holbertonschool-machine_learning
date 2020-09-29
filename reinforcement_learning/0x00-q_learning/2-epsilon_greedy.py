@@ -2,7 +2,7 @@
 """
 Epsilon Greedy
 """
-import gym
+import numpy as np
 
 
 def epsilon_greedy(Q, state, epsilon):
@@ -17,3 +17,12 @@ def epsilon_greedy(Q, state, epsilon):
     Returns:
      The next action index
     """
+
+    e = np.random.uniform(0, 1)
+
+    if e > epsilon:
+        action = np.argmax(Q[state, :])
+    else:
+        action = np.random.randint(0, 3, None)
+
+    return action
