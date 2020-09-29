@@ -2,7 +2,8 @@
 """
 Q-learning
 """
-import gym
+import numpy as np
+epsilon_greedy = __import__('2-epsilon_greedy').epsilon_greedy
 
 
 def train(env, Q, episodes=5000, max_steps=100, alpha=0.1,
@@ -26,3 +27,29 @@ def train(env, Q, episodes=5000, max_steps=100, alpha=0.1,
         - Q is the updated Q-table
         - total_rewards is a list containing the rewards per episode
     """
+
+    all_rewards = []
+
+    for episode in range(episodes):
+        state = env.reset()
+        done = False
+        rewards = 0
+
+        for step in range(max_steps):
+            action = epsilon_greedy(Q, state, epsilon)
+            new_state, reward, done, info = env.step(action)
+            Q[state, action] = (Q[state, action] * (1 - alpha) +
+                                (reward + gamma*np.max(Q[new_state, :]))*alpha)
+            state = new_state
+            if done is True:
+                if reward != 1:
+                    rewards = -1
+                rewards += reward
+                break
+            else:
+                rewards += reward
+        all_rewards.append(rewards)
+        epsilon = ((min_epsilon + (1 - min_epsilon)) *
+                   np.exp(-epsilon_decay * episode))
+
+    return Q, all_rewards
