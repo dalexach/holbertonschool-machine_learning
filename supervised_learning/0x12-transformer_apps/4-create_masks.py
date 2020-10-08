@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
+Function Create Masks
 """
 import tensorflow.compat.v2 as tf
-import tensorflow_datasets as tfds
 
 
 def create_masks(inputs, target):
