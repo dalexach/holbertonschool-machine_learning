@@ -33,7 +33,9 @@ class CustomSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):
         p1 = tf.math.rsqrt(step)
         p2 = step * (self.warmup_steps ** -1.5)
 
-        return tf.math.rsqrt(self.d_model) * tf.math.minimum(p1, p2)
+        output = tf.math.rsqrt(self.d_model) * tf.math.minimum(p1, p2)
+
+        return output
 
 
 def train_transformer(N, dm, h, hidden, max_len, batch_size, epochs):
@@ -108,8 +110,8 @@ def train_transformer(N, dm, h, hidden, max_len, batch_size, epochs):
         tar_inp = tar[:, :-1]
         tar_real = tar[:, 1:]
 
-        enc_padding_mask, combined_mask, dec_padding_mask = \
-            create_masks(inp, tar_inp)
+        enc_padding_mask, combined_mask, dec_padding_mask = create_masks(
+            inp, tar_inp)
 
         with tf.GradientTape() as tape:
             predictions = transformer(inp, tar_inp,
