@@ -32,6 +32,8 @@ class Dataset():
                                        with_info=True,
                                        as_supervised=True)
 
+        self.metadate = metadata
+
         self.data_train = examples['train']
         self.data_valid = examples['validation']
 
