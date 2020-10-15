@@ -76,9 +76,9 @@ state = env.reset()
 actions = env.action_space.n
 model = create_q_model(actions)
 memory = SequentialMemory(limit=1000000, window_length=4)
-policy = LinearAnnealedPolicy(
-    EpsGreedyQPolicy(), attr='eps', value_max=1., value_min=.1,
-    value_test=.05, nb_steps=1000000)
+policy = LinearAnnealedPolicy(EpsGreedyQPolicy(), attr='eps',
+                              value_max=1., value_min=.1,
+                              value_test=.05, nb_steps=1000000)
 stateprocess = AtariProcessor()
 dqn = DQNAgent(model=model, nb_actions=actions, memory=memory,
                nb_steps_warmup=50000, target_model_update=10000,
