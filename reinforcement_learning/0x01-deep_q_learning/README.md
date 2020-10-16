@@ -20,6 +20,16 @@
 | [play.py](play.py) | Python script that can display a game played by the agent trained by train.py. |
 
 
+### Compile and execute
+To test and play first execute train to get the data
+```
+./train.py
+```
+then you can play(Train will take a lot of time, policy.h5 help you for the first time)
+```
+./play.py
+```
+
 ### Build with
 - Python (python 3.5)
 - Numpy (numpy 1.15)
