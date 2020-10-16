@@ -37,6 +37,7 @@ then you can play(Train will take a lot of time, policy.h5 help you for the firs
 - Gym (gym 0.17.2)
 - Keras (keras 2.2.5)
 - Keras-rl (keras-rl 0.4.2)
+- Tensorflow (tensorflow 1.14)
 
 ## Author
 
