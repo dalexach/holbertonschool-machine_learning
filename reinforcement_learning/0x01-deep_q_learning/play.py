@@ -27,11 +27,8 @@ if __name__ == '__main__':
     model = K.models.load_model('policy.h5')
     memory = SequentialMemory(limit=1000000, window_length=4)
     policy = GreedyQPolicy()
-    stateprocess = AtariProcessor()
+    process = AtariProcessor()
     dqn = DQNAgent(model=model, nb_actions=actions, memory=memory,
-                policy=policy, processor=stateprocess)
-    #dqn.compile(optimizer=Adam(lr=.00025), metrics=['mae'])
-    #dqn.load_weights('policy.h5')
+                   policy=policy, processor=process)
     dqn.compile(optimizer=Adam(lr=.00025, clipnorm=1.0), metrics=['mae'])
     dqn.test(env, nb_episodes=10, visualize=True)
-    

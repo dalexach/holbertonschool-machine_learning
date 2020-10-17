@@ -35,14 +35,15 @@ class ModelIntervalCheck(Callback):
         """ Save weights at interval steps during training """
         self.total_steps += 1
         if self.total_steps % self.interval != 0:
-            # Nothing to do.
+            # Nothing
             return
 
         filepath = self.filepath.format(step=self.total_steps, **logs)
         if self.verbose > 0:
-            print('\nStep {}: saving kmodel to {}'.format(
-                self.total_steps, filepath))
+            print('\nStep {}: saving kmodel to {}'.format(self.total_steps,
+                                                          filepath))
         self.kmodel.save(filepath)
+
 
 class AtariProcessor(Processor):
     """
@@ -56,7 +57,6 @@ class AtariProcessor(Processor):
         obs = observation
         assert obs.ndim == 3
         img = Image.fromarray(obs)
-        # img = img.resize((84, 84), Image.ANTIALIAS).convert('L')
         img = img.resize((84, 84)).convert('L')
         img = np.array(img)
         assert img.shape == (84, 84)
@@ -83,8 +83,8 @@ class AtariProcessor(Processor):
 def create_q_model(actions):
     """
     Function that creates a CNN
+    Note: Network defined by the Deepmind paper
     """
-    # Network defined by the Deepmind paper
     inputs = layers.Input(shape=(4, 84, 84))
     layer0 = layers.Permute((2, 3, 1))(inputs)
     layer1 = layers.Conv2D(32, 8, strides=4, activation="relu",
@@ -99,6 +99,7 @@ def create_q_model(actions):
 
     return K.Model(inputs=inputs, outputs=action)
 
+
 if __name__ == '__main__':
     """
     To run this on calling the method
@@ -110,16 +111,14 @@ if __name__ == '__main__':
     model = create_q_model(actions)
     memory = SequentialMemory(limit=1000000, window_length=4)
     policy = LinearAnnealedPolicy(EpsGreedyQPolicy(), attr='eps',
-                                value_max=1., value_min=.1,
-                                value_test=.05, nb_steps=850000)
+                                  value_max=1., value_min=.1,
+                                  value_test=.05, nb_steps=850000)
     process = AtariProcessor()
     dqn = DQNAgent(model=model, nb_actions=actions, memory=memory,
-                nb_steps_warmup=50000, target_model_update=10000,
-                policy=policy, processor=process, train_interval=4,
-                gamma=.99, delta_clip=1.)
+                   nb_steps_warmup=50000, target_model_update=10000,
+                   policy=policy, processor=process, train_interval=4,
+                   gamma=.99, delta_clip=1.)
     dqn.compile(optimizer=Adam(lr=0.00025), metrics=['mae', 'accuracy'])
-    #dqn.fit(env, nb_steps=50000, log_interval=10000, visualize=False, verbose=2)
-    #dqn.save_weights('policy.h5', overwrite=True)
     callback = [ModelIntervalCheck('policy.h5', 1000, 1, model)]
     dqn.fit(env, nb_steps=1750000, callbacks=callback, visualize=True)
     model.save("policy.h5")
