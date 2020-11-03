@@ -1,1 +1,5 @@
-// my comment
+// Inserting a document in a collection
+// collection: school
+// attribute: name, value 'Holberton school'
+
+db.school.insert({name: 'Holberton school'})

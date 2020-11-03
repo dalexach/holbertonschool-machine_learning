@@ -1,1 +1,5 @@
-// my comment
+// Displaying the number of documents in the collection
+// collection: school
+// The db name will be passed as option of mongo command
+
+db.shcool.count()

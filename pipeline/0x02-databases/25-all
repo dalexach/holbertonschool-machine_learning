@@ -1,1 +1,4 @@
-// my comment
+// Listing all documents in the collection school
+// the db bame will be passed as option of mongo comamnd
+
+db.school.find()
