@@ -28,9 +28,9 @@ if __name__ == "__main__":
     print('Methods:')
     methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
     for met in methods:
-        num_met = logs_collection.count_documents({'method': met})
+        num_met = logs_collection.count_documents({"method": met})
         print('\tmethod {}: {}'.format(met, num_met))
 
-    filter_path = {'method': 'GET', 'paht': '/status'}
+    filter_path = {"method": "GET", "path": "/status"}
     num_path = logs_collection.count_documents(filter_path)
     print("{} status check".format(num_path))
