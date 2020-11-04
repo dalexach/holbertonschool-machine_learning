@@ -60,6 +60,17 @@ Not relation databases, known as NoSQL, will give you flexibility on your data: 
 | [33-schools_by_topic.py](33-schools_by_topic.py) | Python function that returns the list of school having a specific topic. |
 | [34-log_stats.py](34-log_stats.py) | Python script that provides some stats about Nginx logs stored in MongoDB. |
 
+#### Advanced Tasks
+
+| File | Description |
+| ------ | ------ |
+| [100-index_my_names.sql](100-index_my_names.sql) |  SQL script that creates an index idx_name_first on the table names and the first letter of name. |
+| [101-index_name_score.sql](101-index_name_score.sql) | SQL script that creates an index idx_name_first_score on the table names and the first letter of name and the score. |
+| [102-need_meeting.sql](102-need_meeting.sql) | SQL script that creates a view need_meeting that lists all students that have a score under 80 (strict) and no last_meeting or more than 1 month. |
+| [103-average_weighted_score.sql](103-average_weighted_score.sql) | SQL script that creates a stored procedure ComputeAverageWeightedScoreForUser that computes and store the average weighted score for a student. |
+| [104-find](104-find) | Script that lists all documents with name starting by Holberton in the collection school |
+| [105-students.py](105-students.py) | Python function that returns all students sorted by average score. |
+| [106-log_stats.py](106-log_stats.py) | Improve 34-log_stats.py by adding the top 10 of the most present IPs in the collection nginx of the database logs. |
 <!----
 | []() | . |
 --->

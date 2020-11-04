@@ -1,4 +1,4 @@
 // Adding a new attribute to a document in the collection, the DB name will be passed as optiopn of mongo command
 // collection: school
 
-db.school.update({'name': 'Holberton school'}, {'$set': {'address': '972 Mission stree'}}, {multi:true})
+db.school.update({'name': 'Holberton school'}, {'$set': {'address': '972 Mission street'}}, {multi:true})
