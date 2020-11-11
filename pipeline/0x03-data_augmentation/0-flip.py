@@ -4,6 +4,7 @@ Flip function
 """
 import tensorflow as tf
 
+
 def flip_image(image):
     """
     Function that flips an image horizontally
@@ -14,3 +15,7 @@ def flip_image(image):
     Returns:
      The flipped image
     """
+
+    fliped = tf.image.flip_left_right(image)
+
+    return fliped

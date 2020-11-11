@@ -15,3 +15,7 @@ def rotate_image(image):
     Returns:
      The rotated image
     """
+
+    rotated = tf.image.rot90(image, k=1)
+
+    return rotated
