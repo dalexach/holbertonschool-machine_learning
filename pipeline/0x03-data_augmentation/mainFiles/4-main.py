@@ -3,7 +3,7 @@
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
-change_brightness = __import__('4-brightness').change_brightness
+change_brightness = __import__('4-brighten').change_brightness
 
 tf.compat.v1.enable_eager_execution()
 tf.compat.v1.set_random_seed(4)
